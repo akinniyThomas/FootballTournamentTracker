@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.DA;
 using Application.Models.Players.Queries;
+using Application.ViewModels;
 using Domain.Models;
 using MediatR;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Players.Handler
 {
-    public class GetAllPlayersHandler : IRequestHandler<GetAllPlayersQuery, List<Player>>
+    public class GetAllPlayersHandler : IRequestHandler<GetAllPlayersQuery, AnObjectResult<Player>>
     {
         private readonly IPlayerDA _player;
 
@@ -19,7 +20,7 @@ namespace Application.Models.Players.Handler
         {
             _player = player;
         }
-        public async Task<List<Player>> Handle(GetAllPlayersQuery request, CancellationToken cancellationToken)
+        public async Task<AnObjectResult<Player>> Handle(GetAllPlayersQuery request, CancellationToken cancellationToken)
         {
             return await _player.GetAllPlayers();
         }

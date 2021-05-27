@@ -1,4 +1,5 @@
 ﻿using Application.Models.Players.Commands;
+using Application.ViewModels;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,43 +25,106 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanAddPlayer()
         {
-            var userId = await _testFixture.CreateUserAsync("user123@user.com", "password123P{", "phoneNumber", new string[] { });
+            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "password123P{", "phoneNumber");
 
-            var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, userId);
+            var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
 
-            var player = await _testFixture.SendAsync(playerCommand);
-            Assert.NotNull(player);
-            Assert.Equal(userId, player.ApplicationUserId);
+            var objectResult = await _testFixture.SendAsync(playerCommand);
+            var playerObject = objectResult.Object;
+
+            Assert.True(objectResult.Succeeded);
+            Assert.NotNull(playerObject?.FirstOrDefault());
+            Assert.Single(playerObject);
         }
 
         [Fact]
-        public async Task DontAddIfApplicationUserIdIsMissing()
+        public async Task UserIsNotGiven()
         {
             var playerCommand =  AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, null);
 
-            await Assert.ThrowsAsync<DbUpdateException>(async () => await _testFixture.SendAsync(playerCommand));
+            var objectResult = await _testFixture.SendAsync(playerCommand);
+            
+            var error = "No user detail is given";
+
+            Assert.False(objectResult.Succeeded);
+            Assert.Equal(error, objectResult.ErrorMessages.FirstOrDefault());
+            Assert.Null(objectResult.Object);
         }
 
         [Fact]
-        public async Task PasswordNotStrongEnough()
+        public async Task PlayerIsNotGiven()
         {
-            var userId = await _testFixture.CreateUserAsync("user123@user.com", "password", "phoneNumber", new string[] { });
+            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "password123P{", "phoneNumber");
 
-            var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, userId);
+            var playerCommand = new AddPlayerCommand(null, user);
 
-            await Assert.ThrowsAsync<DbUpdateException>(async () => await _testFixture.SendAsync(playerCommand));
+            var objectResult = await _testFixture.SendAsync(playerCommand);
+
+            var error = "No player detail is given";
+
+            Assert.False(objectResult.Succeeded);
+            Assert.Equal(error, objectResult.ErrorMessages.FirstOrDefault());
+            Assert.Null(objectResult.Object);
         }
 
-        public AddPlayerCommand AddPlayerDetails(int age, DateTime dob, string playerName, Domain.Enums.Sex sex, string appId)
+        [Fact]
+        public async Task PlayerAndUserIsNotGiven()
+        { 
+            var playerCommand = new AddPlayerCommand(null, null);
+
+            var objectResult = await _testFixture.SendAsync(playerCommand);
+
+            var error = "No player detail is given";
+
+            Assert.False(objectResult.Succeeded);
+            Assert.Equal(error, objectResult.ErrorMessages.FirstOrDefault());
+            Assert.Null(objectResult.Object);
+        }
+
+        [Theory]
+        [InlineData("password")]//, "Could not add User")]
+        [InlineData("password1")]//, "Could not add User")]
+        [InlineData("password1A")]//, "Could not add User")]
+        [InlineData("pA$1")]//, "Could not add User")]
+        [InlineData("##########")]//, "Could not add User")]
+        [InlineData("password1$")]//, "Could not add User")]
+        [InlineData("password32")]//, "Could not add User")]
+        public async Task PasswordNotStrongEnough(string password)
+        {
+            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", password, "phoneNumber");
+            var error = "Could not add User";
+            var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
+
+            var objectResult = await _testFixture.SendAsync(playerCommand);
+
+            Assert.False(objectResult.Succeeded);
+            Assert.Contains(error, objectResult.ErrorMessages);
+            Assert.Null(objectResult.Object);
+        }
+
+        [Fact]
+        public async Task PlayerIsMissing()
+        {
+            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "passwordA1@", "phoneNumber");
+
+            AddPlayerCommand playerCommand = new(null, user);
+
+            var objectResult = await _testFixture.SendAsync(playerCommand);
+
+            Assert.False(objectResult.Succeeded);
+            Assert.Equal("No player detail is given",objectResult.ErrorMessages.FirstOrDefault());
+            Assert.Null(objectResult.Object);
+        }
+
+        public AddPlayerCommand AddPlayerDetails(int age, DateTime dob, string playerName, Domain.Enums.Sex sex, UserViewModel user)
         {
             return new(new Player()
             {
                 Age = age,
                 DOB = dob,
                 PlayerName = playerName,
-                PlayerSex = sex,
-                ApplicationUserId = appId
-            });
+                PlayerSex = sex
+            }, user);
         }
     }
 }

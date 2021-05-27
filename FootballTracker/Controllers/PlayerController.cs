@@ -1,7 +1,10 @@
 ﻿using Application.Models.Players.Commands;
+using Application.ViewModels;
 using Domain.Models;
+using FootballTracker.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +24,9 @@ namespace FootballTracker.Controllers
         }
 
         [HttpPost]
-        public async Task<Player> AddPlayer(Player player)
+        public async Task<AnObjectResult<Player>> AddPlayer(UserPlayerViewModel request)
         {
-            return await _mediator.Send(new AddPlayerCommand(player));
+            return await _mediator.Send(new AddPlayerCommand(request.Player, request.User));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.ViewModels;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace Application.Interfaces.DA
 {
     public interface IPlayerDA
     {
-        Task<Player> AddPlayer(Player player, CancellationToken cancellationToken);
-        Task<bool> DeletePlayer(int playerId, CancellationToken cancellationToken);
-        Task<Player> GetPlayer(int playerId);
-        Task<List<Player>> GetAllPlayers();
-        Task<List<Player>> GetPlayersInTeam(int teamId);
-        Task<Player> UpdatePlayer(int playerId, Player player, CancellationToken cancellationToken);
+        Task<AnObjectResult<Player>> AddPlayer(Player player, UserViewModel user, CancellationToken cancellationToken);
+        Task<AnObjectResult<Player>> DeletePlayer(int playerId, CancellationToken cancellationToken);
+        Task<AnObjectResult<Player>> GetPlayer(int playerId);
+        Task<AnObjectResult<Player>> GetAllPlayers();
+        Task<AnObjectResult<Player>> GetPlayersInTeam(int teamId);
+        Task<AnObjectResult<Player>> UpdatePlayer(int playerId, Player player, CancellationToken cancellationToken);
     }
 }

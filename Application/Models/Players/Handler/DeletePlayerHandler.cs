@@ -1,5 +1,7 @@
 ﻿using Application.Interfaces.DA;
 using Application.Models.Players.Commands;
+using Application.ViewModels;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Players.Handler
 {
-    public class DeletePlayerHandler : IRequestHandler<DeletePlayerCommand, bool>
+    public class DeletePlayerHandler : IRequestHandler<DeletePlayerCommand, AnObjectResult<Player>>
     {
         private readonly IPlayerDA _player;
 
@@ -19,7 +21,7 @@ namespace Application.Models.Players.Handler
             _player = player;
         }
 
-        public Task<bool> Handle(DeletePlayerCommand request, CancellationToken cancellationToken)
+        public Task<AnObjectResult<Player>> Handle(DeletePlayerCommand request, CancellationToken cancellationToken)
         {
             return _player.DeletePlayer(request.PlayerId, cancellationToken);
         }

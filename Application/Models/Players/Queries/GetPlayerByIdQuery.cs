@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.ViewModels;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Players.Queries
 {
-    public record GetPlayerByIdQuery(int Id) : IRequest<Player>;
+    public record GetPlayerByIdQuery(int Id) : IRequest<AnObjectResult<Player>>;
 }

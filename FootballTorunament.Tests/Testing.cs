@@ -1,4 +1,5 @@
-﻿using FootballTracker;
+﻿using Application.ViewModels;
+using FootballTracker;
 using Infrastructure.Context;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -187,6 +188,6 @@ namespace FootballTorunament.Tests
             else return null;
         }
 
-
+        public UserViewModel CreateUserModel(string userName, string emailAddress, string password, string phoneNumber) => new UserViewModel(userName, emailAddress, password, phoneNumber);
     }
 }
