@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Matches\Commands\" />
+    <Folder Include="Models\TeamTournaments\Commands\" />
+    <Folder Include="Models\TeamTournaments\Handler\" />
+    <Folder Include="Models\TeamTournaments\Queries\" />
+    <Folder Include="Models\Prizes\Commands\" />
+    <Folder Include="Models\Prizes\Handler\" />
+    <Folder Include="Models\Prizes\Queries\" />
+    <Folder Include="Models\TeamScores\Commands\" />
+    <Folder Include="Models\TeamScores\Handler\" />
+    <Folder Include="Models\TeamScores\Queries\" />
+    <Folder Include="Models\Teams\Commands\" />
+    <Folder Include="Models\Teams\Handler\" />
+    <Folder Include="Models\Teams\Queries\" />
+    <Folder Include="Models\TournamentPosition\Commands\" />
+    <Folder Include="Models\TournamentPosition\Handler\" />
+    <Folder Include="Models\TournamentPosition\Queries\" />
+    <Folder Include="Models\TournamentSelectedFors\Commands\" />
+    <Folder Include="Models\TournamentSelectedFors\Handler\" />
+    <Folder Include="Models\TournamentSelectedFors\Queries\" />
+    <Folder Include="Models\Tournaments\Commands\" />
+    <Folder Include="Models\Tournaments\Handler\" />
+    <Folder Include="Models\Tournaments\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+</Project>
