@@ -9,7 +9,7 @@ using Xunit;
 
 namespace FootballTorunament.Tests.UnitTests
 {
-    public class IsMatchNullUnplayedNullWinnerTest
+    public class MatchIsNullUnplayedNullWinnerTest
     {
         [Fact]
         public void PlayedIsTrue() => Assert.False(NoWinnerIfMatchNotPlayed.IsMatchNullUnplayedNullWinner(new Match() { Played = true, MatchWinner = new Team() { } }));

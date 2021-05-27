@@ -8,7 +8,7 @@ using Xunit;
 
 namespace FootballTorunament.Tests.UnitTests
 {
-    public class IsNotAMultipleTest
+    public class TournamentIsNotAMultipleTest
     {
         [Theory]
         [InlineData(3)]

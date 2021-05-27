@@ -13,9 +13,11 @@ namespace Domain.Validations.TournamentValidations
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var tournament = validationContext.ObjectInstance as Tournament;
-            if (tournament != null && tournament.DateFinished != null && tournament.DateStarted != null && tournament.DateFinished < tournament.DateStarted)
+            if (IsFinishedDateBeforeStartDate(tournament))
                 return new ValidationResult("You cannot finish before the tournament has begun");
             return ValidationResult.Success;
         }
+
+        public static bool IsFinishedDateBeforeStartDate(Tournament tournament) => tournament != null && tournament.DateFinished != null && tournament.DateStarted != null && tournament.DateFinished.Value.Date < tournament.DateStarted.Value.Date;
     }
 }

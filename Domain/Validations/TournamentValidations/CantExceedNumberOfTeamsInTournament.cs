@@ -13,7 +13,7 @@ namespace Domain.Validations.TournamentValidations
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var tournament = validationContext.ObjectInstance as Tournament;
-            if (tournament != null && tournament.NumberOfTeamsInTournament != tournament.TeamsInTournament.Count)
+            if (NumberOfTeamsInTournamentDoesNotMatchTeamsInTournament(tournament))
                 return new ValidationResult($"Number of Teams in Tournament - {tournament.NumberOfTeamsInTournament} must correspond with the number of Teams to be added to tournament - {tournament.TeamsInTournament.Count}");
             return ValidationResult.Success;
         }

@@ -13,9 +13,14 @@ namespace Domain.Validations.TournamentValidations
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var tournament = validationContext.ObjectInstance as Tournament;
-            if (tournament != null && tournament.DateFinished == null && tournament.TournamentRunnerUp != null)
+            if (tournament.IsNotFinishedTournament(tournament.TournamentRunnerUp))
                 return new ValidationResult("There Can't be a RunnerUp Until the Tournament is Finished");
             return ValidationResult.Success;
         }
+    }
+
+    public static class IsNotFinishedExtension
+    {
+        public static bool IsNotFinishedTournament(this Tournament tournament, Team team) => tournament != null && tournament.DateFinished == null && team != null;
     }
 }

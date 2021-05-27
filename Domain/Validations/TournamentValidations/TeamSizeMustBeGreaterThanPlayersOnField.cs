@@ -13,9 +13,11 @@ namespace Domain.Validations.TournamentValidations
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var tournament = validationContext.ObjectInstance as Tournament;
-            if (tournament != null && tournament.MaxPlayersOnField > tournament.MaxTeamSize)
+            if (IsMaxPlayersOnFieldMoreThanMaxTeamSize(tournament))
                 return new ValidationResult("The Maximum Team Size Cannot be lesser than the Maximum Allowed Players on Field");
             return ValidationResult.Success;
         }
+
+        public static bool IsMaxPlayersOnFieldMoreThanMaxTeamSize(Tournament tournament) => tournament != null && tournament.MaxPlayersOnField > tournament.MaxTeamSize;
     }
 }

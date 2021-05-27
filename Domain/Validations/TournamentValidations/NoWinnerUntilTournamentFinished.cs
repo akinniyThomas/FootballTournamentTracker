@@ -13,7 +13,7 @@ namespace Domain.Validations.TournamentValidations
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var tournament = validationContext.ObjectInstance as Tournament;
-            if (tournament != null && tournament.DateFinished == null && tournament.TournamentWinner != null)
+            if (tournament.IsNotFinishedTournament(tournament.TournamentWinner))
                 return new ValidationResult("There Can't be a Winner Until the Tournament is Finished");
             return ValidationResult.Success;
         }
