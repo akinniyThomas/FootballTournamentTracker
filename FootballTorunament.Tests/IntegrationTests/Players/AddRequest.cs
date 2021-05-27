@@ -24,7 +24,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanAddPlayer()
         {
-            var userId = await _testFixture.RunAsUserAsync("user123@user.com", "password123P{", "phoneNumber", new string[] { });
+            var userId = await _testFixture.CreateUserAsync("user123@user.com", "password123P{", "phoneNumber", new string[] { });
 
             var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, userId);
 
@@ -44,7 +44,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task PasswordNotStrongEnough()
         {
-            var userId = await _testFixture.RunAsUserAsync("user123@user.com", "password", "phoneNumber", new string[] { });
+            var userId = await _testFixture.CreateUserAsync("user123@user.com", "password", "phoneNumber", new string[] { });
 
             var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, userId);
 

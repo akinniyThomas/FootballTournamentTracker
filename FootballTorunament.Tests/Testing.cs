@@ -156,7 +156,7 @@ namespace FootballTorunament.Tests
         }
 
 
-        public async Task<string> RunAsUserAsync(string userName, string password, string phoneNumber, string[] roles)
+        public async Task<string> CreateUserAsync (string userName, string password, string phoneNumber, string[] roles)
         {
             using var scope = _scopeFactory.CreateScope();
 
