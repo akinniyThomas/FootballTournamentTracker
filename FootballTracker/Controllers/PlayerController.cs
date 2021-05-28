@@ -28,5 +28,11 @@ namespace FootballTracker.Controllers
         {
             return await _mediator.Send(new AddPlayerCommand(request.Player, request.User));
         }
+
+        [HttpDelete("id")]
+        public async Task<AnObjectResult<Player>> DeletePlayer(int id)
+        {
+            return await _mediator.Send(new DeletePlayerCommand(id));
+        }
     }
 }

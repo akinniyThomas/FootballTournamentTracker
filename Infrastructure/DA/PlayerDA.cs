@@ -37,7 +37,6 @@ namespace Infrastructure.DA
                     await _tournamentContext.Players.AddAsync(player);
                     await _tournamentContext.SaveChangesAsync(cancellationToken);
                     return AnObjectResult<Player>.ReturnObjectResult(player, true, "");
-
                 }
                 return AnObjectResult<Player>.ReturnObjectResult(false, ConcatinateStrings(result.Errors.Select(x => x.Description).ToList(), "Could not add User"));
             }
@@ -46,9 +45,26 @@ namespace Infrastructure.DA
             return AnObjectResult<Player>.ReturnObjectResult(false, "No user detail is given");
         }
 
-        public Task<AnObjectResult<Player>> DeletePlayer(int playerId, CancellationToken cancellationToken)
+        public async Task<AnObjectResult<Player>> DeletePlayer(int playerId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var player = await _tournamentContext.Players.FindAsync(playerId);
+            if (player.IsNotNull())
+            {
+                var user = await _userManager.FindByIdAsync(player.ApplicationUserId);
+                if (user.IsNotNull())
+                {
+                    var result = await _userManager.DeleteAsync(user);
+                    if (result.Succeeded)
+                    {
+                        _tournamentContext.Players.Remove(player);
+                        await _tournamentContext.SaveChangesAsync(cancellationToken);
+                        return AnObjectResult<Player>.ReturnObjectResult(true, "");
+                    }
+                    else return AnObjectResult<Player>.ReturnObjectResult(false, ConcatinateStrings(result.Errors.Select(x => x.Description).ToList(), $"Unable to delete User - {user.UserName}"));
+                }
+                else return AnObjectResult<Player>.ReturnObjectResult(false, "User you are trying to delete doesn't exist");
+            }
+            else return AnObjectResult<Player>.ReturnObjectResult(false, "Player you are trying to delete doesn't exist!");
         }
 
         public Task<AnObjectResult<Player>> GetAllPlayers()

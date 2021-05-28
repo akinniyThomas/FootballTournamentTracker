@@ -12,8 +12,8 @@ using Xunit;
 
 namespace FootballTorunament.Tests.IntegrationTests.Players
 {
-    [Collection(nameof(Testing))]
-    public class AddRequest
+    //[Collection(nameof(Testing))]
+    public class AddRequest:IClassFixture<Testing>
     {
         private readonly Testing _testFixture;
 
@@ -25,11 +25,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanAddPlayer()
         {
-            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "password123P{", "phoneNumber");
-
-            var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
-
-            var objectResult = await _testFixture.SendAsync(playerCommand);
+            var objectResult = await AddNewPlayerToDB(_testFixture);
             var playerObject = objectResult.Object;
 
             Assert.True(objectResult.Succeeded);
@@ -116,7 +112,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
             Assert.Null(objectResult.Object);
         }
 
-        public AddPlayerCommand AddPlayerDetails(int age, DateTime dob, string playerName, Domain.Enums.Sex sex, UserViewModel user)
+        public static AddPlayerCommand AddPlayerDetails(int age, DateTime dob, string playerName, Domain.Enums.Sex sex, UserViewModel user)
         {
             return new(new Player()
             {
@@ -125,6 +121,15 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
                 PlayerName = playerName,
                 PlayerSex = sex
             }, user);
+        }
+
+        public async static Task<AnObjectResult<Player>> AddNewPlayerToDB(Testing testFixture)
+        {
+            var user = testFixture.CreateUserModel($"user{Testing.AddCount}@user.com", $"user{Testing.AddCount}@user.com", "password123P{", $"phoneNumber{Testing.AddCount}");
+            Testing.AddCount++;
+            var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
+
+            return await testFixture.SendAsync(playerCommand);
         }
     }
 }
