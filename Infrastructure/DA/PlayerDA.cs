@@ -82,6 +82,37 @@ namespace Infrastructure.DA
             throw new NotImplementedException();
         }
 
+        public async Task<AnObjectResult<Player>> UpdatePlayer(int playerId, Player player, CancellationToken cancellationToken)
+        {
+            if (player.IsNotNull())
+            {
+                var returnPlayer = await _tournamentContext.Players.FindAsync(playerId);
+                if (returnPlayer.IsNotNull())
+                {
+                    //var updatedPlayer = FilledPlayerData(player, returnPlayer);
+                    if (returnPlayer.Id == player.Id)
+                    {
+                        returnPlayer.Age = player.Age;
+                        returnPlayer.DOB = player.DOB;
+                        returnPlayer.IsRetired = player.IsRetired;
+                        returnPlayer.IsSelected = player.IsSelected;
+                        returnPlayer.PlayerName = player.PlayerName;
+                        returnPlayer.PlayerSex = player.PlayerSex;
+
+                        await _tournamentContext.SaveChangesAsync(cancellationToken);
+                        return AnObjectResult<Player>.ReturnObjectResult(returnPlayer, true, "");
+                    }
+                    return AnObjectResult<Player>.ReturnObjectResult(false, "Trying to update the wrong player, please check again and try afterwards!");
+                }
+                return AnObjectResult<Player>.ReturnObjectResult(false, "Player to be updated is not correct!");
+            }
+            return AnObjectResult<Player>.ReturnObjectResult(false, "Player to be updated is empty!");
+        }
+
+        public List<string> ConcatinateStrings(List<string> list, params string[] strings) => list.Concat(strings.ToList()).ToList();
+
+        public List<string> ConcatinateStrings(params string[] strings) => strings.ToList();
+
         public IdentityUser ReturnIdentityUser(UserViewModel user) => new()
         {
             UserName = user.UserName,
@@ -89,13 +120,16 @@ namespace Infrastructure.DA
             PhoneNumber = user.PhoneNumber
         };
 
-        public Task<AnObjectResult<Player>> UpdatePlayer(int playerId, Player player, CancellationToken cancellationToken)
+        public Player FilledPlayerData(Player incomingPlayer, Player updatedPlayer)
         {
-            throw new NotImplementedException();
+            updatedPlayer.Age = incomingPlayer.Age;
+            updatedPlayer.DOB = incomingPlayer.DOB;
+            updatedPlayer.IsRetired = incomingPlayer.IsRetired;
+            updatedPlayer.IsSelected = incomingPlayer.IsSelected;
+            updatedPlayer.PlayerName = incomingPlayer.PlayerName;
+            updatedPlayer.PlayerSex = incomingPlayer.PlayerSex;
+            return updatedPlayer;
         }
 
-        public List<string> ConcatinateStrings(List<string> list, params string[] strings) => list.Concat(strings.ToList()).ToList();
-
-        public List<string> ConcatinateStrings(params string[] strings) => strings.ToList();
     }
 }
