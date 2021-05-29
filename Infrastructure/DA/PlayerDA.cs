@@ -67,14 +67,14 @@ namespace Infrastructure.DA
             else return AnObjectResult<Player>.ReturnObjectResult(false, "Player you are trying to delete doesn't exist!");
         }
 
-        public Task<AnObjectResult<Player>> GetAllPlayers()
-        {
-            throw new NotImplementedException();
-        }
+        public Task<AnObjectResult<Player>> GetAllPlayers() => Task.FromResult(AnObjectResult<Player>.ReturnObjectResult(_tournamentContext.Players?.ToList(), true, ""));
 
-        public Task<AnObjectResult<Player>> GetPlayer(int playerId)
+        public async Task<AnObjectResult<Player>> GetPlayer(int playerId)
         {
-            throw new NotImplementedException();
+            var player = await _tournamentContext.Players.FindAsync(playerId);
+            if (player != null)
+                return AnObjectResult<Player>.ReturnObjectResult(player, true, "");
+            return AnObjectResult<Player>.ReturnObjectResult(false, $"No Player with given {playerId} Exists");
         }
 
         public Task<AnObjectResult<Player>> GetPlayersInTeam(int teamId)
@@ -95,7 +95,6 @@ namespace Infrastructure.DA
                         returnPlayer.Age = player.Age;
                         returnPlayer.DOB = player.DOB;
                         returnPlayer.IsRetired = player.IsRetired;
-                        returnPlayer.IsSelected = player.IsSelected;
                         returnPlayer.PlayerName = player.PlayerName;
                         returnPlayer.PlayerSex = player.PlayerSex;
 
@@ -107,6 +106,12 @@ namespace Infrastructure.DA
                 return AnObjectResult<Player>.ReturnObjectResult(false, "Player to be updated is not correct!");
             }
             return AnObjectResult<Player>.ReturnObjectResult(false, "Player to be updated is empty!");
+        }
+
+        public async Task<AnObjectResult<Player>> UpdatePlayerTournamentSelected(int playerId, TournamentSelectedFor tournamentSelected, CancellationToken cancellationToken)
+        {
+            await _tournamentContext.SaveChangesAsync(cancellationToken);
+            return AnObjectResult<Player>.ReturnObjectResult(true, "");
         }
 
         public List<string> ConcatinateStrings(List<string> list, params string[] strings) => list.Concat(strings.ToList()).ToList();
@@ -131,5 +136,29 @@ namespace Infrastructure.DA
             return updatedPlayer;
         }
 
+        public async Task<AnObjectResult<TournamentSelectedFor>> GetAllTournamentSelectedFor(int playerId)
+        {
+            var player = await GetPlayer(playerId);
+            if (player.Succeeded) {
+                var tournaments = player.Object.FirstOrDefault().IsSelected?.ToList();
+                if (tournaments.IsNotNull())
+                    return AnObjectResult<TournamentSelectedFor>.ReturnObjectResult(tournaments, true, "");
+                return AnObjectResult<TournamentSelectedFor>.ReturnObjectResult(false, "Player has no tournament!");
+            }
+            return AnObjectResult<TournamentSelectedFor>.ReturnObjectResult(false, player.ErrorMessages);
+        }
+
+        public async Task<AnObjectResult<TournamentSelectedFor>> GetOneTournamentSelectedFor(int playerId, int tournamentId)
+        {
+            var tournaments = await GetAllTournamentSelectedFor(playerId);
+            if (tournaments.Object.IsNotNull())
+            {
+                var tournament = tournaments.Object.FirstOrDefault(x => x.Tournament.Id == tournamentId);
+                if (tournament.IsNotNull())
+                    return AnObjectResult<TournamentSelectedFor>.ReturnObjectResult(tournament, true, "");
+                return AnObjectResult<TournamentSelectedFor>.ReturnObjectResult(false, "");
+            }
+            return AnObjectResult<TournamentSelectedFor>.ReturnObjectResult(false, tournaments.ErrorMessages);
+        }
     }
 }

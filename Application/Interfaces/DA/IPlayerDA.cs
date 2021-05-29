@@ -16,6 +16,9 @@ namespace Application.Interfaces.DA
         Task<AnObjectResult<Player>> GetPlayer(int playerId);
         Task<AnObjectResult<Player>> GetAllPlayers();
         Task<AnObjectResult<Player>> GetPlayersInTeam(int teamId);
+        Task<AnObjectResult<TournamentSelectedFor>> GetAllTournamentSelectedFor(int playerId);
+        Task<AnObjectResult<TournamentSelectedFor>> GetOneTournamentSelectedFor(int playerId, int tournamentId);
         Task<AnObjectResult<Player>> UpdatePlayer(int playerId, Player player, CancellationToken cancellationToken);
+        Task<AnObjectResult<Player>> UpdatePlayerTournamentSelected(int playerId, TournamentSelectedFor tournamentSelected, CancellationToken cancellationToken);
     }
 }
