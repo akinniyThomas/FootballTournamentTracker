@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FootballTorunament.Tests.IntegrationTests.Match
+namespace FootballTorunament.Tests.IntegrationTests.Matches
 {
     [Collection(nameof(Testing))]
     class FindRequest

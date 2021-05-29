@@ -1,6 +1,7 @@
 ﻿using Application.Models.Players.Commands;
 using Application.ViewModels;
 using Domain.Models;
+using FootballTorunament.Tests.IntegrationTests.Methods;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,7 +26,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanAddPlayer()
         {
-            var objectResult = await AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
             var playerObject = objectResult.Object;
 
             Assert.True(objectResult.Succeeded);
@@ -36,7 +37,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task UserIsNotGiven()
         {
-            var playerCommand =  AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, null);
+            var playerCommand = PlayersMethods.AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, null);
 
             var objectResult = await _testFixture.SendAsync(playerCommand);
             
@@ -90,7 +91,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         {
             var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", password, password, "phoneNumber");
             var error = "Could not add User";
-            var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
+            var playerCommand = PlayersMethods.AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
 
             var objectResult = await _testFixture.SendAsync(playerCommand);
 
@@ -118,34 +119,13 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         {
             var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "password1", "password2", "phoneNumber");
             var error = "Password and Confirm Password are not same!";
-            var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
+            var playerCommand = PlayersMethods.AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
 
             var objectResult = await _testFixture.SendAsync(playerCommand);
 
             Assert.False(objectResult.Succeeded);
             Assert.Contains(error, objectResult.ErrorMessages);
             Assert.Null(objectResult.Object);
-        }
-
-        public static AddPlayerCommand AddPlayerDetails(int age, DateTime dob, string playerName, Domain.Enums.Sex sex, UserViewModel user)
-        {
-            return new(new Player()
-            {
-                Age = age,
-                DOB = dob,
-                PlayerName = playerName,
-                PlayerSex = sex
-            }, user);
-        }
-
-        public async static Task<AnObjectResult<Player>> AddNewPlayerToDB(Testing testFixture)
-        {
-            var password = "password123P{";
-            var user = testFixture.CreateUserModel($"user{Testing.AddCount}@user.com", $"user{Testing.AddCount}@user.com", password, password, $"phoneNumber{Testing.AddCount}");
-            Testing.AddCount++;
-            var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
-
-            return await testFixture.SendAsync(playerCommand);
         }
     }
 }

@@ -27,7 +27,6 @@ namespace FootballTorunament.Tests
         private static IServiceScopeFactory _scopeFactory;
         private static Checkpoint _checkpoint;
 
-        public static int AddCount = 0;
         public Testing()
         {
             ConfigurationBuild();

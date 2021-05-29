@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FootballTorunament.Tests.IntegrationTests.TournamentPosition
+namespace FootballTorunament.Tests.IntegrationTests.TournamentPositions
 {
     class DeleteRequest
     {

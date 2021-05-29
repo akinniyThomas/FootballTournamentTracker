@@ -1,4 +1,6 @@
 ﻿using Application.Models.Players.Commands;
+using Application.Models.Players.Queries;
+using FootballTorunament.Tests.IntegrationTests.Methods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +22,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanEditSuccessfully()
         {
-            var objectResult = await AddRequest.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
             var player = objectResult.Object.FirstOrDefault();
 
             player.Age = 999;
@@ -32,12 +34,21 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
             Assert.NotNull(result.Object);
             Assert.NotEmpty(result.Object);
             Assert.Equal(999, result.Object.FirstOrDefault().Age);
+
+            var findPlayer = await _testFixture.SendAsync(new GetPlayerByIdQuery(result.Object.FirstOrDefault().Id));
+            var findPlayerObject = findPlayer.Object;
+
+            Assert.True(findPlayer.Succeeded);
+            Assert.NotNull(findPlayerObject);
+            Assert.NotEmpty(findPlayerObject);
+            Assert.Single(findPlayerObject);
+            Assert.Equal(999, findPlayerObject.FirstOrDefault().Age);
         }
 
         [Fact]
         public async Task PlayerIsNull()
         {
-            var objectResult = await AddRequest.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
             var player = objectResult.Object.FirstOrDefault();
 
             player.Age = 999;
@@ -53,7 +64,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task PlayerIdIsWrong()
         {
-            var objectResult = await AddRequest.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
             var player = objectResult.Object.FirstOrDefault();
 
             player.Age = 999;
@@ -69,10 +80,10 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task PlayerIdIsForDifferentPlayer()
         {
-            var objectResult = await AddRequest.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
 
             var player = objectResult.Object.FirstOrDefault();
-            var playerId = (await AddRequest.AddNewPlayerToDB(_testFixture)).Object.FirstOrDefault().Id;
+            var playerId = (await PlayersMethods.AddNewPlayerToDB(_testFixture)).Object.FirstOrDefault().Id;
 
             player.Age = 999;
 

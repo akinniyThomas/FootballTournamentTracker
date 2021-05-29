@@ -1,5 +1,6 @@
 ﻿using Application.Models.Players.Queries;
 using Domain.Models;
+using FootballTorunament.Tests.IntegrationTests.Methods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanGetOnePlayer()
         {
-            var player = (await AddRequest.AddNewPlayerToDB(_testFixture)).Object.FirstOrDefault();
+            var player = (await PlayersMethods.AddNewPlayerToDB(_testFixture)).Object.FirstOrDefault();
 
             var result = (await _testFixture.SendAsync(new GetPlayerByIdQuery(player.Id)));
             var playerDetails = result.Object.FirstOrDefault();
@@ -33,6 +34,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
             Assert.NotEmpty(result.Object);
             Assert.Equal(player.DOB, playerDetails.DOB);
             Assert.Equal(player.PlayerName, playerDetails.PlayerName);
+            Assert.Equal(player.Id, playerDetails.Id);
             Assert.Single(result.Object);
         }
 
@@ -52,7 +54,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanGetManyPlayers()
         {
-            var players = await AddManyPlayers();
+            var players = await PlayersMethods.AddManyPlayers(_testFixture);
             var result = await _testFixture.SendAsync(new GetAllPlayersQuery());
             //Player
             Assert.NotNull(result);
@@ -63,12 +65,17 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
             Assert.Contains(players[1].Id, result.Object.Select(x => x.Id));
             Assert.Contains(players[2].Id, result.Object.Select(x => x.Id));
             Assert.Contains(players[3].Id, result.Object.Select(x => x.Id));
+
+            var player = await PlayersMethods.AddNewPlayerToDB(_testFixture);
+
+            Assert.True(player.Succeeded);
+            Assert.DoesNotContain(player.Object.FirstOrDefault().Id, result.Object.Select(x => x.Id));
         }
 
         [Fact(Skip = "Not Implemented Yet!")]
         public async Task GetAllTournamentsPlayerIsSelectedFor()
         {
-            var players = await AddManyPlayers();
+            var players = await PlayersMethods.AddManyPlayers(_testFixture);
 
             //then add some tournaments
 
@@ -82,7 +89,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact(Skip ="Not Implemented Yet!")]
         public async Task GetOneTournamentPlayerIsSelectedFor()
         {
-            var players = await AddManyPlayers();
+            var players = await PlayersMethods.AddManyPlayers(_testFixture);
 
             //then add some tournaments
 
@@ -96,7 +103,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact(Skip="Until Teams Come In Play")]
         public async Task GetPlayersInATeam()
         {
-            var players = await AddManyPlayers();
+            var players = await PlayersMethods.AddManyPlayers(_testFixture);
 
             Domain.Models.Team team = new()
             {
@@ -119,15 +126,6 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
             Assert.Contains(players[1].Id, result.Object.Select(x => x.Id));
             Assert.Contains(players[2].Id, result.Object.Select(x => x.Id));
             Assert.Contains(players[3].Id, result.Object.Select(x => x.Id));
-        }
-
-        public async Task<List<Player>> AddManyPlayers()
-        {
-            var p1 = (await AddRequest.AddNewPlayerToDB(_testFixture)).Object.FirstOrDefault();
-            var p2 = (await AddRequest.AddNewPlayerToDB(_testFixture)).Object.FirstOrDefault();
-            var p3 = (await AddRequest.AddNewPlayerToDB(_testFixture)).Object.FirstOrDefault();
-            var p4 = (await AddRequest.AddNewPlayerToDB(_testFixture)).Object.FirstOrDefault();
-            return new List<Player>() { p1, p2, p3, p4 };
         }
     }
 }

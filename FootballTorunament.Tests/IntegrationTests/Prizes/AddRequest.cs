@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FootballTorunament.Tests.IntegrationTests.Prize
+namespace FootballTorunament.Tests.IntegrationTests.Prizes
 {
     class AddRequest
     {
