@@ -15,9 +15,6 @@
     <Folder Include="Models\TeamScores\Commands\" />
     <Folder Include="Models\TeamScores\Handler\" />
     <Folder Include="Models\TeamScores\Queries\" />
-    <Folder Include="Models\Teams\Commands\" />
-    <Folder Include="Models\Teams\Handler\" />
-    <Folder Include="Models\Teams\Queries\" />
     <Folder Include="Models\TournamentPosition\Commands\" />
     <Folder Include="Models\TournamentPosition\Handler\" />
     <Folder Include="Models\TournamentPosition\Queries\" />
