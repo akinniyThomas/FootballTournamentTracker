@@ -35,5 +35,8 @@ namespace FootballTracker.Controllers
 
         [HttpGet("id")]
         public async Task<AnObjectResult<Player>> GetOnePlayer(int id) => await _mediator.Send(new GetPlayerByIdQuery(id));
+
+        [HttpPut("id")]
+        public async Task<AnObjectResult<Player>> EditPlayer(int id, Player player) => await _mediator.Send(new UpdatePlayerCommand(id, player));
     }
 }
