@@ -18,8 +18,8 @@ using Xunit;
 
 namespace FootballTorunament.Tests
 {
-    //[CollectionDefinition(nameof(Testing))]
-    //public class TestFixtureCollection : ICollectionFixture<Testing> { }
+    [CollectionDefinition(nameof(Testing))]
+    public class TestFixtureCollection : ICollectionFixture<Testing> { }
 
     public class Testing : IAsyncLifetime
     {

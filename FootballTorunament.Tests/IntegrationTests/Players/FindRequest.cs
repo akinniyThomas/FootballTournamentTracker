@@ -10,7 +10,8 @@ using Xunit;
 
 namespace FootballTorunament.Tests.IntegrationTests.Players
 {
-    public class FindRequest:IClassFixture<Testing>
+    [Collection(nameof(Testing))]
+    public class FindRequest//:IClassFixture<Testing>
     {
         private readonly Testing _testFixture;
 

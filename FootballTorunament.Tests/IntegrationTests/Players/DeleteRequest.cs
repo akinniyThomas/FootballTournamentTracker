@@ -10,8 +10,8 @@ using Xunit;
 
 namespace FootballTorunament.Tests.IntegrationTests.Players
 {
-    //[Collection(nameof(Testing))]
-    public class DeleteRequest:IClassFixture<Testing>
+    [Collection(nameof(Testing))]
+    public class DeleteRequest//:IClassFixture<Testing>
     {
         private readonly Testing _testFixture;
 

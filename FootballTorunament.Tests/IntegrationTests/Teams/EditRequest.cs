@@ -10,7 +10,8 @@ using Xunit;
 
 namespace FootballTorunament.Tests.IntegrationTests.Teams
 {
-    public class EditRequest : IClassFixture<Testing>
+    [Collection(nameof(Testing))]
+    public class EditRequest //: IClassFixture<Testing>
     {
         private readonly Testing _testFixture;
 

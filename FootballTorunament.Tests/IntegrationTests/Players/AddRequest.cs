@@ -13,8 +13,8 @@ using Xunit;
 
 namespace FootballTorunament.Tests.IntegrationTests.Players
 {
-    //[Collection(nameof(Testing))]
-    public class AddRequest:IClassFixture<Testing>
+    [Collection(nameof(Testing))]
+    public class AddRequest//:IClassFixture<Testing>
     {
         private readonly Testing _testFixture;
 
