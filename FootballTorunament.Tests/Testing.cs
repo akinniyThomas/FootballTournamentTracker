@@ -189,6 +189,6 @@ namespace FootballTorunament.Tests
             else return null;
         }
 
-        public UserViewModel CreateUserModel(string userName, string emailAddress, string password, string phoneNumber) => new UserViewModel(userName, emailAddress, password, phoneNumber);
+        public UserViewModel CreateUserModel(string userName, string emailAddress, string password, string confirmPassword, string phoneNumber) => new UserViewModel(userName, emailAddress, password, confirmPassword, phoneNumber);
     }
 }

@@ -50,7 +50,8 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task PlayerIsNotGiven()
         {
-            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "password123P{", "phoneNumber");
+            var password = "password123P{";
+            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", password, password, "phoneNumber");
 
             var playerCommand = new AddPlayerCommand(null, user);
 
@@ -87,7 +88,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [InlineData("password32")]//, "Could not add User")]
         public async Task PasswordNotStrongEnough(string password)
         {
-            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", password, "phoneNumber");
+            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", password, password, "phoneNumber");
             var error = "Could not add User";
             var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
 
@@ -101,7 +102,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task PlayerIsMissing()
         {
-            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "passwordA1@", "phoneNumber");
+            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "passwordA1@", "passwordA1@", "phoneNumber");
 
             AddPlayerCommand playerCommand = new(null, user);
 
@@ -109,6 +110,20 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
 
             Assert.False(objectResult.Succeeded);
             Assert.Equal("No player detail is given",objectResult.ErrorMessages.FirstOrDefault());
+            Assert.Null(objectResult.Object);
+        }
+
+        [Fact]
+        public async Task PasswordNotSameAsConfirmPassword()
+        {
+            var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "password1", "password2", "phoneNumber");
+            var error = "Password and Confirm Password are not same!";
+            var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
+
+            var objectResult = await _testFixture.SendAsync(playerCommand);
+
+            Assert.False(objectResult.Succeeded);
+            Assert.Contains(error, objectResult.ErrorMessages);
             Assert.Null(objectResult.Object);
         }
 
@@ -125,7 +140,8 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
 
         public async static Task<AnObjectResult<Player>> AddNewPlayerToDB(Testing testFixture)
         {
-            var user = testFixture.CreateUserModel($"user{Testing.AddCount}@user.com", $"user{Testing.AddCount}@user.com", "password123P{", $"phoneNumber{Testing.AddCount}");
+            var password = "password123P{";
+            var user = testFixture.CreateUserModel($"user{Testing.AddCount}@user.com", $"user{Testing.AddCount}@user.com", password, password, $"phoneNumber{Testing.AddCount}");
             Testing.AddCount++;
             var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
 

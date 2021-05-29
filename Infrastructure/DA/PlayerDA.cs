@@ -30,15 +30,19 @@ namespace Infrastructure.DA
             if (user.IsNotNull() && player.IsNotNull())
             {
                 var identityUser = ReturnIdentityUser(user);
-                var result = await _userManager.CreateAsync(identityUser, user.Password);
-                if (result.Succeeded)
+                if (user.ConfirmPassword == user.Password)
                 {
-                    player.ApplicationUserId = identityUser.Id;
-                    await _tournamentContext.Players.AddAsync(player);
-                    await _tournamentContext.SaveChangesAsync(cancellationToken);
-                    return AnObjectResult<Player>.ReturnObjectResult(player, true, "");
+                    var result = await _userManager.CreateAsync(identityUser, user.Password);
+                    if (result.Succeeded)
+                    {
+                        player.ApplicationUserId = identityUser.Id;
+                        await _tournamentContext.Players.AddAsync(player);
+                        await _tournamentContext.SaveChangesAsync(cancellationToken);
+                        return AnObjectResult<Player>.ReturnObjectResult(player, true, "");
+                    }
+                    return AnObjectResult<Player>.ReturnObjectResult(false, ConcatinateStrings(result.Errors.Select(x => x.Description).ToList(), "Could not add User"));
                 }
-                return AnObjectResult<Player>.ReturnObjectResult(false, ConcatinateStrings(result.Errors.Select(x => x.Description).ToList(), "Could not add User"));
+                return AnObjectResult<Player>.ReturnObjectResult(false, ConcatinateStrings("Password and Confirm Password are not same!"));
             }
             if (!player.IsNotNull())
                 return AnObjectResult<Player>.ReturnObjectResult(false, "No player detail is given");
@@ -114,27 +118,16 @@ namespace Infrastructure.DA
             return AnObjectResult<Player>.ReturnObjectResult(true, "");
         }
 
-        public List<string> ConcatinateStrings(List<string> list, params string[] strings) => list.Concat(strings.ToList()).ToList();
+        public static List<string> ConcatinateStrings(List<string> list, params string[] strings) => list.Concat(strings.ToList()).ToList();
 
-        public List<string> ConcatinateStrings(params string[] strings) => strings.ToList();
+        public static List<string> ConcatinateStrings(params string[] strings) => strings.ToList();
 
-        public IdentityUser ReturnIdentityUser(UserViewModel user) => new()
+        public static IdentityUser ReturnIdentityUser(UserViewModel user) => new()
         {
             UserName = user.UserName,
             Email = user.EmailAddress,
             PhoneNumber = user.PhoneNumber
         };
-
-        public Player FilledPlayerData(Player incomingPlayer, Player updatedPlayer)
-        {
-            updatedPlayer.Age = incomingPlayer.Age;
-            updatedPlayer.DOB = incomingPlayer.DOB;
-            updatedPlayer.IsRetired = incomingPlayer.IsRetired;
-            updatedPlayer.IsSelected = incomingPlayer.IsSelected;
-            updatedPlayer.PlayerName = incomingPlayer.PlayerName;
-            updatedPlayer.PlayerSex = incomingPlayer.PlayerSex;
-            return updatedPlayer;
-        }
 
         public async Task<AnObjectResult<TournamentSelectedFor>> GetAllTournamentSelectedFor(int playerId)
         {

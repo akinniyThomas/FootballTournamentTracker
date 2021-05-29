@@ -28,15 +28,16 @@ namespace Application.ViewModels
 
         public static AnObjectResult<T> ReturnObjectResult(bool succeded, List<string> errorMessages) => new(succeded, errorMessages);
 
-        public static AnObjectResult<T> ReturnObjectResult(bool succeded, string errorMessage) => new(succeded, ReturnList(errorMessage));
+        public static AnObjectResult<T> ReturnObjectResult(bool succeded, string errorMessage) => new(succeded, ReturnObjectList(errorMessage));
 
         public static AnObjectResult<T> ReturnObjectResult(List<T> theObject, bool succeeded, List<string> errorMessages) => new(theObject, succeeded, errorMessages);
 
-        public static AnObjectResult<T> ReturnObjectResult(List<T> theObject, bool succeeded, string errorMessage) => new(theObject, succeeded, ReturnList(errorMessage));
+        public static AnObjectResult<T> ReturnObjectResult(List<T> theObject, bool succeeded, string errorMessage) => new(theObject, succeeded, ReturnObjectList(errorMessage));
 
-        public static AnObjectResult<T> ReturnObjectResult(T theObject, bool succeeded, string errorMessage) => new(ReturnObjectList<T>(theObject), succeeded, ReturnList(errorMessage));
+        public static AnObjectResult<T> ReturnObjectResult(T theObject, bool succeeded, string errorMessage) => new(ReturnObjectList(theObject), succeeded, ReturnObjectList(errorMessage));
 
-        private static List<T> ReturnObjectList<T>(T obj) => new() { obj };
-        private static List<string> ReturnList(string str) => new() { str };
+        public static AnObjectResult<T> ReturnObjectResult(T theObject, bool succeeded, List<string> errorMessages) => new(ReturnObjectList(theObject), succeeded, errorMessages);
+
+        public static List<T> ReturnObjectList<T>(T obj) => new() { obj };
     }
 }
