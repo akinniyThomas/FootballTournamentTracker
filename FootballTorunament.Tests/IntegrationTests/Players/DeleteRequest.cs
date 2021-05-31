@@ -23,7 +23,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanDeleteSuccessfully()
         {
-            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture, null);
             var player = objectResult.Object.FirstOrDefault();
             var result = await _testFixture.SendAsync(new DeletePlayerCommand(player.Id));
             var findPlayer = await _testFixture.SendAsync(new GetPlayerByIdQuery(player.Id));
@@ -54,7 +54,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task PlayerAlreadyDeleted()
         {
-            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture, null);
             var player = objectResult.Object.FirstOrDefault();
             await _testFixture.SendAsync(new DeletePlayerCommand(player.Id));
             var result = await _testFixture.SendAsync(new DeletePlayerCommand(player.Id));

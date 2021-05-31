@@ -10,6 +10,7 @@ namespace Domain.Models
     {
         public int Id { get; set; }
         public Tournament Tournament { get; set; }
+        public Team Team { get; set; }
         public int Position { get; set; }
     }
 }

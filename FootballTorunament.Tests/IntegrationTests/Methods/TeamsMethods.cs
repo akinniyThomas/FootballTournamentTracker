@@ -13,25 +13,26 @@ namespace FootballTorunament.Tests.IntegrationTests.Methods
     {
         public static int AddTeamNameCount;
 
-        private static AddTeamCommand AddNewTeamDetails(string teamName, List<Player> players, Player captain) =>
+        private static AddTeamCommand AddNewTeamDetails(string teamName) =>
              new AddTeamCommand(new Team()
              {
-                 TeamName = teamName,
-                 Players = players,
-                 Captain = captain
+                 TeamName = teamName
              });
 
-        public async static Task<AnObjectResult<Team>> AddNewTeam(List<Player> players, Player captain, Testing testFixture)
+
+
+        public async static Task<AnObjectResult<Team>> AddNewTeam(Testing testFixture)
         {
-            var team = AddNewTeamDetails($"TeamName - {AddTeamNameCount}", players, captain);
+            var team = AddNewTeamDetails($"TeamName - {AddTeamNameCount}");
             AddTeamNameCount++;
             return await testFixture.SendAsync(team);
         }
 
         public async static Task<AnObjectResult<Team>> AddNewTeamToDB(Testing testFixture)
         {
-            var players = await PlayersMethods.AddManyPlayers(testFixture);
-            return await AddNewTeam(players, players[0], testFixture);
+            var result = await AddNewTeam(testFixture);
+            await PlayersMethods.AddManyPlayers(testFixture, result.Object.FirstOrDefault());
+            return result;
         }
 
         public async static Task<List<Team>> AddManyTeamsToDB(Testing testFixture)

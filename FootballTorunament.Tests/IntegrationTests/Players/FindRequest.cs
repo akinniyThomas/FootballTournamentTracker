@@ -23,7 +23,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanGetOnePlayer()
         {
-            var player = (await PlayersMethods.AddNewPlayerToDB(_testFixture)).Object.FirstOrDefault();
+            var player = (await PlayersMethods.AddNewPlayerToDB(_testFixture, null)).Object.FirstOrDefault();
 
             var result = (await _testFixture.SendAsync(new GetPlayerByIdQuery(player.Id)));
             var playerDetails = result.Object.FirstOrDefault();
@@ -55,7 +55,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanGetManyPlayers()
         {
-            var players = await PlayersMethods.AddManyPlayers(_testFixture);
+            var players = await PlayersMethods.AddManyPlayers(_testFixture, null);
             var result = await _testFixture.SendAsync(new GetAllPlayersQuery());
             //Player
             Assert.NotNull(result);
@@ -67,7 +67,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
             Assert.Contains(players[2].Id, result.Object.Select(x => x.Id));
             Assert.Contains(players[3].Id, result.Object.Select(x => x.Id));
 
-            var player = await PlayersMethods.AddNewPlayerToDB(_testFixture);
+            var player = await PlayersMethods.AddNewPlayerToDB(_testFixture, null);
 
             Assert.True(player.Succeeded);
             Assert.DoesNotContain(player.Object.FirstOrDefault().Id, result.Object.Select(x => x.Id));
@@ -76,7 +76,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact(Skip = "Not Implemented Yet!")]
         public async Task GetAllTournamentsPlayerIsSelectedFor()
         {
-            var players = await PlayersMethods.AddManyPlayers(_testFixture);
+            var players = await PlayersMethods.AddManyPlayers(_testFixture, null);
 
             //then add some tournaments
 
@@ -90,8 +90,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact(Skip ="Not Implemented Yet!")]
         public async Task GetOneTournamentPlayerIsSelectedFor()
         {
-            var players = await PlayersMethods.AddManyPlayers(_testFixture);
-
+            var players = await PlayersMethods.AddManyPlayers(_testFixture, null);
             //then add some tournaments
 
             //then add a new tournamentSelectedFor
@@ -104,7 +103,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact(Skip="Until Teams Come In Play")]
         public async Task GetPlayersInATeam()
         {
-            var players = await PlayersMethods.AddManyPlayers(_testFixture);
+            var players = await PlayersMethods.AddManyPlayers(_testFixture, null);
 
             Domain.Models.Team team = new()
             {
@@ -112,7 +111,6 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
                     players[0],
                     players[1]
                 },
-                Captain = players[0],
                 TeamName="TeamName"
             };
 

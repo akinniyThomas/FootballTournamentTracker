@@ -12,14 +12,14 @@ namespace Domain.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+        //[Required]
         [UniqueTeamName]
         public string TeamName { get; set; }
-        [Required]
+        //[Required]
         public ICollection<Player> Players { get; set; }
-        [Required]
-        [CaptainMustAPlayer]
-        public Player Captain { get; set; }
+        //[Required]
+        //[CaptainMustAPlayer]
+        //public Player Captain { get; set; }
         public ICollection<TeamTournament> PresentTournaments { get; set; }
         public ICollection<TournamentPosition> PastTournaments { get; set; }
     }

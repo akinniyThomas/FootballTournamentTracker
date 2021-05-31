@@ -72,7 +72,8 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             Assert.NotEmpty(playerDetails);
             Assert.Single(playerDetails);
             Assert.Contains(playerDetails.FirstOrDefault().Id, team.Players.Select(x => x.Id));
-            Assert.Equal(team.Captain.PlayerName, playerDetails.FirstOrDefault().PlayerName);
+            Assert.Equal(team.Players.FirstOrDefault(x => x.IsCaptain).PlayerName, playerDetails.FirstOrDefault().PlayerName);
+            //Assert.Equal(team.Captain.PlayerName, playerDetails.FirstOrDefault().PlayerName);
         }
 
         [Fact]

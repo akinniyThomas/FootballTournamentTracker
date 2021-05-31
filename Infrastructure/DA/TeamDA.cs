@@ -1,4 +1,6 @@
-﻿using Application.Interfaces.DA;
+﻿using Application.Extensions;
+using Application.Interfaces.Context;
+using Application.Interfaces.DA;
 using Application.ViewModels;
 using Domain.Models;
 using System;
@@ -12,9 +14,22 @@ namespace Infrastructure.DA
 {
     public class TeamDA : ITeamDA
     {
-        public Task<AnObjectResult<Team>> AddTeam(Team team, CancellationToken cancellation)
+        private readonly ITournamentDbContext _tournamentContext;
+
+        public TeamDA(ITournamentDbContext tournamentContext)
         {
-            throw new NotImplementedException();
+            _tournamentContext = tournamentContext;
+        }
+
+        public async Task<AnObjectResult<Team>> AddTeam(Team team, CancellationToken cancellation)
+        {
+            if (team.IsNotNull())
+            {
+                await _tournamentContext.Teams.AddAsync(team);
+                await _tournamentContext.SaveChangesAsync(cancellation);
+                return AnObjectResult<Team>.ReturnObjectResult(team, true, "");
+            }
+            else return AnObjectResult<Team>.ReturnObjectResult(false, "The Team is given!");
         }
 
         public Task<AnObjectResult<Team>> DeleteTeam(int teamId, CancellationToken cancellation)

@@ -26,7 +26,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanAddPlayer()
         {
-            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture, null);
             var playerObject = objectResult.Object;
 
             Assert.True(objectResult.Succeeded);
@@ -37,7 +37,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task UserIsNotGiven()
         {
-            var playerCommand = PlayersMethods.AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, null);
+            var playerCommand = PlayersMethods.AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, null, new Team());
 
             var objectResult = await _testFixture.SendAsync(playerCommand);
             
@@ -91,7 +91,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         {
             var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", password, password, "phoneNumber");
             var error = "Could not add User";
-            var playerCommand = PlayersMethods.AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
+            var playerCommand = PlayersMethods.AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user, new Team());
 
             var objectResult = await _testFixture.SendAsync(playerCommand);
 
@@ -119,7 +119,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         {
             var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "password1", "password2", "phoneNumber");
             var error = "Password and Confirm Password are not same!";
-            var playerCommand = PlayersMethods.AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user);
+            var playerCommand = PlayersMethods.AddPlayerDetails(12, new DateTime(2008, 11, 23), "Akinniyi Wonderful", Domain.Enums.Sex.Male, user, new Team());
 
             var objectResult = await _testFixture.SendAsync(playerCommand);
 

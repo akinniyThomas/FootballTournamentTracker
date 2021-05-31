@@ -1,5 +1,6 @@
 ﻿using Application.Models.Players.Commands;
 using Application.Models.Players.Queries;
+using Domain.Models;
 using FootballTorunament.Tests.IntegrationTests.Methods;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task CanEditSuccessfully()
         {
-            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture,null);
             var player = objectResult.Object.FirstOrDefault();
 
             player.Age = 999;
@@ -49,7 +50,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task PlayerIsNull()
         {
-            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture, null);
             var player = objectResult.Object.FirstOrDefault();
 
             player.Age = 999;
@@ -65,7 +66,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task PlayerIdIsWrong()
         {
-            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture, null);
             var player = objectResult.Object.FirstOrDefault();
 
             player.Age = 999;
@@ -79,12 +80,30 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         }
 
         [Fact]
+        public async Task MoreThanOneCaptain()
+        {
+            var error = "Can not have more than one captain at a time, Remove the last captain before making another player the captain!";
+            var team = (await TeamsMethods.AddNewTeam(_testFixture)).Object.FirstOrDefault();
+            var players = await PlayersMethods.AddManyPlayers(_testFixture, team);
+
+            players[0].IsCaptain = true;
+            players[1].IsCaptain = true;
+
+            await _testFixture.SendAsync(new UpdatePlayerCommand(players[0].Id, players[0]));
+            var result = await _testFixture.SendAsync(new UpdatePlayerCommand(players[1].Id, players[1]));
+
+            Assert.False(result.Succeeded);
+            Assert.Contains(error, result.ErrorMessages);
+            Assert.Null(result.Object);
+        }
+
+        [Fact]
         public async Task PlayerIdIsForDifferentPlayer()
         {
-            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture);
+            var objectResult = await PlayersMethods.AddNewPlayerToDB(_testFixture, null);
 
             var player = objectResult.Object.FirstOrDefault();
-            var playerId = (await PlayersMethods.AddNewPlayerToDB(_testFixture)).Object.FirstOrDefault().Id;
+            var playerId = (await PlayersMethods.AddNewPlayerToDB(_testFixture, null)).Object.FirstOrDefault().Id;
 
             player.Age = 999;
 

@@ -18,10 +18,11 @@ namespace Domain.Models
         public int Age { get; set; }
         public DateTime DOB { get; set; }
         public ICollection<TournamentSelectedFor> IsSelected { get; set; }
-        //public Team Player_sTeam { get; set; }
+        public Team Team { get; set; }
         public bool IsRetired { get; set; } = false;
         [Required]
         [ApplicationUserMustBeIncluded]
         public string ApplicationUserId { get; set; }
+        public bool IsCaptain { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace Domain.Models
         [NoRunnerUpUntilTournamentFinished]
         public Team TournamentRunnerUp { get; set; }
 
-        [Required]
+        //[Required]
         [CantExceedNumberOfTeamsInTournament]
         public ICollection<TeamTournament> TeamsInTournament { get; set; }
     }

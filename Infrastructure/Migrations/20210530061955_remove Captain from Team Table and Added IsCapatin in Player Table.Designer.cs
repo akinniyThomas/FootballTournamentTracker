@@ -3,15 +3,17 @@ using System;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(TournamentDbContext))]
-    partial class TournamentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210530061955_remove Captain from Team Table and Added IsCapatin in Player Table")]
+    partial class removeCaptainfromTeamTableandAddedIsCapatininPlayerTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,6 +173,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("TeamName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -587,11 +590,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.Player", b =>
                 {
-                    b.HasOne("Domain.Models.Team", "Team")
+                    b.HasOne("Domain.Models.Team", null)
                         .WithMany("Players")
                         .HasForeignKey("TeamId");
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("Domain.Models.Prize", b =>
@@ -658,15 +659,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.TournamentPosition", b =>
                 {
-                    b.HasOne("Domain.Models.Team", "Team")
+                    b.HasOne("Domain.Models.Team", null)
                         .WithMany("PastTournaments")
                         .HasForeignKey("TeamId");
 
                     b.HasOne("Domain.Models.Tournament", "Tournament")
                         .WithMany()
                         .HasForeignKey("TournamentId");
-
-                    b.Navigation("Team");
 
                     b.Navigation("Tournament");
                 });

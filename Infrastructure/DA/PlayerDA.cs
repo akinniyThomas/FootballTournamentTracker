@@ -94,6 +94,12 @@ namespace Infrastructure.DA
                 if (returnPlayer.IsNotNull())
                 {
                     //var updatedPlayer = FilledPlayerData(player, returnPlayer);
+                    if(player.IsCaptain)
+                    {
+                        var captains = _tournamentContext.Teams.Where(x => x.Players.FirstOrDefault(p => p.Id == player.Id).IsCaptain);
+                        if (captains.Count() == 1 && captains.FirstOrDefault().Id != player.Id)
+                            return AnObjectResult<Player>.ReturnObjectResult(false, "Can not have more than one captain at a time, Remove the last captain before making another player the captain!");
+                    }
                     if (returnPlayer.Id == player.Id)
                     {
                         returnPlayer.Age = player.Age;
@@ -101,6 +107,8 @@ namespace Infrastructure.DA
                         returnPlayer.IsRetired = player.IsRetired;
                         returnPlayer.PlayerName = player.PlayerName;
                         returnPlayer.PlayerSex = player.PlayerSex;
+                        returnPlayer.IsCaptain = player.IsCaptain;
+                        //returnPlayer.Team = await _tournamentContext.Teams.FindAsync(player.Team.Id);
 
                         await _tournamentContext.SaveChangesAsync(cancellationToken);
                         return AnObjectResult<Player>.ReturnObjectResult(returnPlayer, true, "");
