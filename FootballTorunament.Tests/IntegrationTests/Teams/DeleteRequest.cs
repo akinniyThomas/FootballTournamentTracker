@@ -20,24 +20,25 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             _testFixture = testFixture;
         }
 
-        //[Fact]
-        //public async Task CanDeleteTeam()
-        //{
-        //    var team = TeamsMethods.AddNewTeamToDB(_testFixture);
+        [Fact]
+        public async Task CanDeleteTeam()
+        {
+            var team = await TeamsMethods.AddNewTeamToDB(_testFixture);
 
-        //    var deleteOutput = await TeamsMethods.AddNewTeamToDB(_testFixture);
-        //    var findTeam = await _testFixture.SendAsync(new GetOneTeamQuery(team.Id));
+            var deleteOutput = await _testFixture.SendAsync(new DeleteTeamCommand(team.Object.FirstOrDefault().Id));
 
-        //    var error = "No Team with given";
+            var findTeam = await _testFixture.SendAsync(new GetOneTeamQuery(team.Object.FirstOrDefault().Id));
+
+            var error = "No Team with given";
 
 
-        //    Assert.True(deleteOutput.Succeeded);
-        //    Assert.Null(deleteOutput.Object);
-        //    Assert.Equal("", deleteOutput.ErrorMessages.FirstOrDefault());
+            Assert.True(deleteOutput.Succeeded);
+            Assert.Null(deleteOutput.Object);
+            Assert.Equal("", deleteOutput.ErrorMessages.FirstOrDefault());
 
-        //    Assert.Null(findTeam.Object);
-        //    Assert.False(findTeam.Succeeded);
-        //    Assert.Matches(error, findTeam.ErrorMessages.LastOrDefault());
-        //}
+            Assert.Null(findTeam.Object);
+            Assert.False(findTeam.Succeeded);
+            Assert.Matches(error, findTeam.ErrorMessages.LastOrDefault());
+        }
     }
 }

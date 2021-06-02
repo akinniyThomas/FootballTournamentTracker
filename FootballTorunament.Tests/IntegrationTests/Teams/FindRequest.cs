@@ -59,7 +59,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             Assert.Equal(team.Id, teamDetails.FirstOrDefault().Id);
         }
 
-        [Fact]
+        [Fact(Skip ="Undecided if i should put in team or player")]
         public async Task CanGetCaptain()
         {
             var team = (await TeamsMethods.AddNewTeamToDB(_testFixture)).Object.FirstOrDefault();
@@ -79,7 +79,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             //Assert.Equal(team.Captain.PlayerName, playerDetails.FirstOrDefault().PlayerName);
         }
 
-        [Fact]
+        [Fact(Skip = "Undecided if i should put in team or player")]
         public async Task CanGetPlayersInTeam()
         {
             var team = (await TeamsMethods.AddNewTeamToDB(_testFixture)).Object.FirstOrDefault();

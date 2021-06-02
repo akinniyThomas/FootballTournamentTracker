@@ -35,7 +35,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             Assert.Equal(newTeamName, result.Object.FirstOrDefault().TeamName);
             Assert.Single(result.Object);
 
-            var findTeam = await _testFixture.SendAsync(new GetOneTeamQuery(result.Object.FirstOrDefault().Id));
+            var findTeam = await _testFixture.SendAsync(new GetOneTeamQuery(team.Id));
             var findTeamObject = findTeam.Object?.FirstOrDefault();
 
             Assert.True(findTeam.Succeeded);

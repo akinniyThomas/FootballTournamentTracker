@@ -23,13 +23,8 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
         [Fact]
         public async Task CanAddTeam()
         {
-            var team = await TeamsMethods.AddNewTeam(_testFixture);
-
-            var oddPlayer = (await PlayersMethods.AddNewPlayerToDB(_testFixture, null)).Object.FirstOrDefault();
-            var players = await PlayersMethods.AddManyPlayers(_testFixture, team.Object.FirstOrDefault());
-
+            var team = await TeamsMethods.AddNewTeamToDB(_testFixture);
             var teamObject = team.Object.FirstOrDefault();
-            var allPlayersInTeam = (await _testFixture.SendAsync(new GetAllPlayersQuery())).Object.Where(x => x.PlayerTeam.Id == teamObject.Id).Select(x => x.PlayerName);
 
             Assert.NotNull(team);
             Assert.NotNull(team.Object);
@@ -40,13 +35,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
 
             Assert.Equal("", team.ErrorMessages.FirstOrDefault());
 
-            //Assert.Equal(players[0].PlayerName, teamObject.Captain.PlayerName);
-            Assert.Contains(players[0].PlayerName, allPlayersInTeam);
-            Assert.Contains(players[1].PlayerName, allPlayersInTeam);
-            Assert.Contains(players[2].PlayerName, allPlayersInTeam);
-            Assert.Contains(players[3].PlayerName, allPlayersInTeam);
-
-            Assert.DoesNotContain(oddPlayer.PlayerName, allPlayersInTeam);
+            Assert.Matches("TeamName", teamObject.TeamName);
         }
 
     }

@@ -16,7 +16,7 @@ namespace Domain.Models
         [UniqueTeamName]
         public string TeamName { get; set; }
         //[Required]
-        public ICollection<Player> Players { get; set; }
+        //public ICollection<Player> Players { get; set; }
         //[Required]
         //[CaptainMustAPlayer]
         //public Player Captain { get; set; }
