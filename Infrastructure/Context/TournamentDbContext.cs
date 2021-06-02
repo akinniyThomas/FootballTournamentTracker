@@ -36,8 +36,13 @@ namespace Infrastructure.Context
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
+            //foreach(EntityEntry entry in ChangeTracker.Entries())
+            //{
+            //    entry.Members.chil
+            //}
             foreach (EntityEntry<AuditableEntity> entry in ChangeTracker.Entries<AuditableEntity>())
             {
+                //if(entry.)
                 if (entry.State == EntityState.Added)
                 {
                     entry.Entity.Created = DateTime.Now;
@@ -57,6 +62,10 @@ namespace Infrastructure.Context
             base.OnModelCreating(builder);
 
             builder.Entity<TeamTournament>().HasKey(c => new { c.TeamId, c.TournamentId });
+
+            //builder.Entity<Player>().HasKey(c => c.Team.Id);
+            //builder.Entity<Team>().HasOne()
+            //builder.Entity<Player>().HasOne(p => p.PlayerTeam).WithMany(t => t.Players).HasForeignKey(x => x.PlayerTeam);
 
             //builder.Entity<TeamTournament>()
             //    .HasOne(t => t.Team)

@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(TournamentDbContext))]
-    [Migration("20210531151353_still model changesu")]
-    partial class stillmodelchangesu
+    [Migration("20210602010706_Remove collection from Player and Team Tables")]
+    partial class RemovecollectionfromPlayerandTeamTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -363,7 +363,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<int>("PlayerId")
+                    b.Property<int?>("PlayerId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("TournamentId")
@@ -590,7 +590,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.Player", b =>
                 {
                     b.HasOne("Domain.Models.Team", "Team")
-                        .WithMany("Players")
+                        .WithMany()
                         .HasForeignKey("TeamId");
 
                     b.Navigation("Team");
@@ -627,7 +627,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.TeamTournament", b =>
                 {
                     b.HasOne("Domain.Models.Team", "Team")
-                        .WithMany("PresentTournaments")
+                        .WithMany()
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -661,7 +661,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.TournamentPosition", b =>
                 {
                     b.HasOne("Domain.Models.Team", "Team")
-                        .WithMany("PastTournaments")
+                        .WithMany()
                         .HasForeignKey("TeamId");
 
                     b.HasOne("Domain.Models.Tournament", "Tournament")
@@ -676,10 +676,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.TournamentSelectedFor", b =>
                 {
                     b.HasOne("Domain.Models.Player", "Player")
-                        .WithMany("IsSelected")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("PlayerId");
 
                     b.HasOne("Domain.Models.Tournament", "Tournament")
                         .WithMany()
@@ -744,20 +742,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.Match", b =>
                 {
                     b.Navigation("TeamsScores");
-                });
-
-            modelBuilder.Entity("Domain.Models.Player", b =>
-                {
-                    b.Navigation("IsSelected");
-                });
-
-            modelBuilder.Entity("Domain.Models.Team", b =>
-                {
-                    b.Navigation("PastTournaments");
-
-                    b.Navigation("Players");
-
-                    b.Navigation("PresentTournaments");
                 });
 
             modelBuilder.Entity("Domain.Models.Tournament", b =>

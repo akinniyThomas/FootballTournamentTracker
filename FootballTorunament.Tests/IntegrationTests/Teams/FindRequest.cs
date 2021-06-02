@@ -1,4 +1,5 @@
-﻿using Application.Models.Teams.Queries;
+﻿using Application.Models.Players.Queries;
+using Application.Models.Teams.Queries;
 using FootballTorunament.Tests.IntegrationTests.Methods;
 using System;
 using System.Collections.Generic;
@@ -66,13 +67,15 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             var result = await _testFixture.SendAsync(new GetCaptainQuery(team.Id));
             var playerDetails = result.Object;
 
+            var allPlayersInTeam = (await _testFixture.SendAsync(new GetAllPlayersQuery())).Object.Where(x => x.PlayerTeam.Id == team.Id);
+
             Assert.True(result.Succeeded);
             Assert.NotNull(result);
             Assert.NotNull(playerDetails);
             Assert.NotEmpty(playerDetails);
             Assert.Single(playerDetails);
-            Assert.Contains(playerDetails.FirstOrDefault().Id, team.Players.Select(x => x.Id));
-            Assert.Equal(team.Players.FirstOrDefault(x => x.IsCaptain).PlayerName, playerDetails.FirstOrDefault().PlayerName);
+            Assert.Contains(playerDetails.FirstOrDefault().Id, allPlayersInTeam.Select(x => x.Id));
+            Assert.Equal(allPlayersInTeam.FirstOrDefault(x => x.IsCaptain).PlayerName, playerDetails.FirstOrDefault().PlayerName);
             //Assert.Equal(team.Captain.PlayerName, playerDetails.FirstOrDefault().PlayerName);
         }
 
@@ -81,7 +84,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
         {
             var team = (await TeamsMethods.AddNewTeamToDB(_testFixture)).Object.FirstOrDefault();
 
-            var result = await _testFixture.SendAsync(new GetPlayersInTeamQuery(team.Id));
+            var result = await _testFixture.SendAsync(new Application.Models.Teams.Queries.GetPlayersInTeamQuery(team.Id));
             var playerDetails = result.Object;
 
             Assert.True(result.Succeeded);
@@ -90,7 +93,9 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             Assert.NotEmpty(playerDetails);
             Assert.Single(playerDetails);
 
-            foreach (var player in team.Players)
+            var allPlayers = await _testFixture.SendAsync(new GetAllPlayersQuery());
+
+            foreach (var player in allPlayers.Object.Where(x => x.PlayerTeam.Id == team.Id))
                 Assert.Contains(player.Id, playerDetails.Select(x => x.Id));
         }
 
@@ -107,9 +112,9 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             Assert.NotNull(result);
             Assert.NotNull(tournamentPositions);
             Assert.NotEmpty(tournamentPositions);
-            Assert.Contains(team.PastTournaments.FirstOrDefault().Id, tournamentPositions.Select(x => x.Id));
-            var tt = team.PastTournaments.FirstOrDefault().Id;
-            Assert.Equal(team.PastTournaments.FirstOrDefault(x => x.Id == tt).Position, tournamentPositions.FirstOrDefault(x => x.Id == tt).Position);
+            //Assert.Contains(team.PastTournaments.FirstOrDefault().Id, tournamentPositions.Select(x => x.Id));
+            //var tt = team.PastTournaments.FirstOrDefault().Id;
+            //Assert.Equal(team.PastTournaments.FirstOrDefault(x => x.Id == tt).Position, tournamentPositions.FirstOrDefault(x => x.Id == tt).Position);
         }
 
         [Fact(Skip = "Tournaments Not yet Created")]
@@ -125,8 +130,8 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             Assert.NotNull(teamTournaments);
             Assert.NotEmpty(teamTournaments);
             
-            foreach(var tt in team.PresentTournaments)
-                Assert.Contains(tt.TeamId, teamTournaments.Select(x => x.TeamId));
+            //foreach(var tt in team.PresentTournaments)
+            //    Assert.Contains(tt.TeamId, teamTournaments.Select(x => x.TeamId));
         }
     }
 }

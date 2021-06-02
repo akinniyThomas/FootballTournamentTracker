@@ -15,22 +15,23 @@ namespace FootballTorunament.Tests.IntegrationTests.Methods
 
         public static AddPlayerCommand AddPlayerDetails(int age, DateTime dob, string playerName, Domain.Enums.Sex sex, UserViewModel user, Team team)
         {
-            return new(new Player()
+            var player = new Player()
             {
                 Age = age,
                 DOB = dob,
                 PlayerName = playerName,
-                PlayerSex = sex,
-                Team = team
-            }, user);
+                PlayerSex = sex
+            };
+            player.PlayerTeam = team;
+            return new(player, user);
         }
 
         public async static Task<AnObjectResult<Player>> AddNewPlayerToDB(Testing testFixture, Team team)
         {
             var password = "password123P{";
             var user = testFixture.CreateUserModel($"user{AddPlayerCount}@user.com", $"user{AddPlayerCount}@user.com", password, password, $"phoneNumber{AddPlayerCount}");
-            AddPlayerCount++;
             var playerCommand = AddPlayerDetails(12, new DateTime(2008, 11, 23), $"Player - {AddPlayerCount}", Domain.Enums.Sex.Male, user, team);
+            AddPlayerCount++;
 
             return await testFixture.SendAsync(playerCommand);
         }

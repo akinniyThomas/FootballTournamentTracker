@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(TournamentDbContext))]
-    [Migration("20210530235119_Modifications to the one-to-many relationships")]
-    partial class Modificationstotheonetomanyrelationships
+    [Migration("20210531153500_changes")]
+    partial class changes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -173,7 +173,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("TeamName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

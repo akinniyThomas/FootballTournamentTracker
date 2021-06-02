@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.Models.Players.Queries;
+using Domain.Models;
 using FootballTorunament.Tests.IntegrationTests.Methods;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             var players = await PlayersMethods.AddManyPlayers(_testFixture, team.Object.FirstOrDefault());
 
             var teamObject = team.Object.FirstOrDefault();
+            var allPlayersInTeam = (await _testFixture.SendAsync(new GetAllPlayersQuery())).Object.Where(x => x.PlayerTeam.Id == teamObject.Id).Select(x => x.PlayerName);
 
             Assert.NotNull(team);
             Assert.NotNull(team.Object);
@@ -39,12 +41,12 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             Assert.Equal("", team.ErrorMessages.FirstOrDefault());
 
             //Assert.Equal(players[0].PlayerName, teamObject.Captain.PlayerName);
-            Assert.Contains(players[0].PlayerName, teamObject.Players.Select(x => x.PlayerName));
-            Assert.Contains(players[1].PlayerName, teamObject.Players.Select(x => x.PlayerName));
-            Assert.Contains(players[2].PlayerName, teamObject.Players.Select(x => x.PlayerName));
-            Assert.Contains(players[3].PlayerName, teamObject.Players.Select(x => x.PlayerName));
+            Assert.Contains(players[0].PlayerName, allPlayersInTeam);
+            Assert.Contains(players[1].PlayerName, allPlayersInTeam);
+            Assert.Contains(players[2].PlayerName, allPlayersInTeam);
+            Assert.Contains(players[3].PlayerName, allPlayersInTeam);
 
-            Assert.DoesNotContain(oddPlayer.PlayerName, teamObject.Players.Select(x => x.PlayerName));
+            Assert.DoesNotContain(oddPlayer.PlayerName, allPlayersInTeam);
         }
 
     }

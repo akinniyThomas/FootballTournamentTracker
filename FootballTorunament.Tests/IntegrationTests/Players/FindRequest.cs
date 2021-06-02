@@ -105,12 +105,12 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         {
             var players = await PlayersMethods.AddManyPlayers(_testFixture, null);
 
-            Domain.Models.Team team = new()
+            Team team = new()
             {
-                Players = new List<Player>() {
-                    players[0],
-                    players[1]
-                },
+                //Players = new List<Player>() {
+                //    players[0],
+                //    players[1]
+                //},
                 TeamName="TeamName"
             };
 

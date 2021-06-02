@@ -17,8 +17,9 @@ namespace Domain.Models
         public Sex PlayerSex { get; set; }
         public int Age { get; set; }
         public DateTime DOB { get; set; }
-        public ICollection<TournamentSelectedFor> IsSelected { get; set; }
-        public Team Team { get; set; }
+        //public ICollection<TournamentSelectedFor> IsSelected { get; set; }
+        //public int TeamId { get; set; }
+        public Team PlayerTeam { get; set; }
         public bool IsRetired { get; set; } = false;
         [Required]
         [ApplicationUserMustBeIncluded]

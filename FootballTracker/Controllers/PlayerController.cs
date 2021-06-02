@@ -31,7 +31,11 @@ namespace FootballTracker.Controllers
         public async Task<AnObjectResult<Player>> DeletePlayer(int id) => await _mediator.Send(new DeletePlayerCommand(id));
 
         [HttpGet]
-        public async Task<AnObjectResult<Player>> GetAllPlayers() => await _mediator.Send(new GetAllPlayersQuery());
+        public async Task<AnObjectResult<Player>> GetAllPlayers() { 
+            var result = await _mediator.Send(new GetAllPlayersQuery());
+            return result;
+        }
+
 
         [HttpGet("id")]
         public async Task<AnObjectResult<Player>> GetOnePlayer(int id) => await _mediator.Send(new GetPlayerByIdQuery(id));

@@ -5,6 +5,7 @@ using Application.ViewModels;
 using Domain.Models;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,7 +97,8 @@ namespace Infrastructure.DA
                     //var updatedPlayer = FilledPlayerData(player, returnPlayer);
                     if(player.IsCaptain)
                     {
-                        var captains = _tournamentContext.Teams.Where(x => x.Players.FirstOrDefault(p => p.Id == player.Id).IsCaptain);
+                        //var captains = _tournamentContext.Teams.Where(x => x.Players.FirstOrDefault(p => p.Id == player.Id).IsCaptain);
+                        var captains = _tournamentContext.Players.Where(x => x.PlayerTeam.Id == player.PlayerTeam.Id).Where(x => x.IsCaptain);
                         if (captains.Count() == 1 && captains.FirstOrDefault().Id != player.Id)
                             return AnObjectResult<Player>.ReturnObjectResult(false, "Can not have more than one captain at a time, Remove the last captain before making another player the captain!");
                     }
@@ -141,9 +143,9 @@ namespace Infrastructure.DA
         {
             var player = await GetPlayer(playerId);
             if (player.Succeeded) {
-                var tournaments = player.Object.FirstOrDefault().IsSelected?.ToList();
-                if (tournaments.IsNotNull())
-                    return AnObjectResult<TournamentSelectedFor>.ReturnObjectResult(tournaments, true, "");
+                //var tournaments = player.Object.FirstOrDefault().IsSelected?.ToList();
+                //if (tournaments.IsNotNull())
+                //    return AnObjectResult<TournamentSelectedFor>.ReturnObjectResult(tournaments, true, "");
                 return AnObjectResult<TournamentSelectedFor>.ReturnObjectResult(false, "Player has no tournament!");
             }
             return AnObjectResult<TournamentSelectedFor>.ReturnObjectResult(false, player.ErrorMessages);

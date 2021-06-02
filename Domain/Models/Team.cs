@@ -20,7 +20,7 @@ namespace Domain.Models
         //[Required]
         //[CaptainMustAPlayer]
         //public Player Captain { get; set; }
-        public ICollection<TeamTournament> PresentTournaments { get; set; }
-        public ICollection<TournamentPosition> PastTournaments { get; set; }
+        //public ICollection<TeamTournament> PresentTournaments { get; set; }
+        //public ICollection<TournamentPosition> PastTournaments { get; set; }
     }
 }
