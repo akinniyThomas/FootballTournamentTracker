@@ -14,18 +14,18 @@ namespace Application.Models.Teams.Handler
 {
     public class GetPlayersInTeamHandler : IRequestHandler<GetPlayersInTeamQuery, AnObjectResult<Player>>
     {
-        private readonly ITeamDA _team;
+        private readonly IPlayerDA _player;
 
-        public GetPlayersInTeamHandler(ITeamDA team)
+        public GetPlayersInTeamHandler(IPlayerDA player)
         {
-            _team = team;
+            _player = player;
         }
 
-        public Task<AnObjectResult<Player>> Handle(GetPlayersInTeamQuery request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<AnObjectResult<Player>> Handle(GetPlayersInTeamQuery request, CancellationToken cancellationToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        //public async Task<AnObjectResult<Player>> Handle(GetPlayersInTeamQuery request, CancellationToken cancellationToken) => await _team.GetPlayersInTeam(request.TeamId);
+        public async Task<AnObjectResult<Player>> Handle(GetPlayersInTeamQuery request, CancellationToken cancellationToken) => await _player.GetPlayersInTeam(request.TeamId);
     }
 }

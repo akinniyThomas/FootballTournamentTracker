@@ -1,5 +1,9 @@
 ﻿using Application.Interfaces.Context;
+using Application.Models.Teams.Commands;
+using Application.Models.Teams.Queries;
+using Application.ViewModels;
 using Domain.Models;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,51 +17,26 @@ namespace FootballTracker.Controllers
     [Route("api/[controller]")]
     public class TeamController:ControllerBase
     {
-        private readonly ITournamentDbContext _tournamentContext;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IMediator _mediator;
 
-        public TeamController(ITournamentDbContext tournamentContext, UserManager<IdentityUser> userManager)
+        public TeamController(IMediator mediator)
         {
-            _tournamentContext = tournamentContext;
-            _userManager = userManager;
+            _mediator = mediator;
         }
+
+        [HttpGet]
+        public async Task<AnObjectResult<Team>> Get() => await _mediator.Send(new GetAllTeamsQuery());
 
         [HttpGet("{id}")]
-        public async Task<IEnumerable<Team>> Get(int id)
-        {
-            Team team = new()
-            {
-                TeamName = $"TeamName - {id}"
-            };
+        public async Task<AnObjectResult<Team>> GetById(int id) => await _mediator.Send(new GetOneTeamQuery(id));
 
-            await _tournamentContext.Teams.AddAsync(team);
-           await  _tournamentContext.SaveChangesAsync(new System.Threading.CancellationToken());
+        [HttpPost]
+        public async Task<AnObjectResult<Team>> Post(Team team) => await _mediator.Send(new AddTeamCommand(team));
 
-            IdentityUser identityUser = new()
-            {
-                Email = "email@email.eamil",
-                UserName = "email@email.eamil",
-                PhoneNumber = "PhoneNumber11"
-            };
+        [HttpPut("{id}")]
+        public async Task<AnObjectResult<Team>> Put(int id, Team team) => await _mediator.Send(new UpdateTeamCommand(id, team));
 
-            var result = await _userManager.CreateAsync(identityUser, "Pass123$!");
-            if (result.Succeeded) ;
-            var tt = _tournamentContext.Teams.FirstOrDefault();
-
-            Player player1 = new()
-            {
-                Age = 12,
-                ApplicationUserId = identityUser.Id,
-                DOB = DateTime.Now,
-                PlayerName = "PlayerName-",
-                PlayerSex = Domain.Enums.Sex.Both,
-                PlayerTeam = tt
-            };
-
-            await _tournamentContext.Players.AddAsync(player1);
-            await _tournamentContext.SaveChangesAsync(new System.Threading.CancellationToken());
-
-            return _tournamentContext.Teams;
-        }
+        [HttpDelete("{id}")]
+        public async Task<AnObjectResult<Team>> Delete(int id) => await _mediator.Send(new DeleteTeamCommand(id));
     }
 }

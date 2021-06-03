@@ -31,10 +31,7 @@ namespace FootballTracker.Controllers
         public async Task<AnObjectResult<Player>> DeletePlayer(int id) => await _mediator.Send(new DeletePlayerCommand(id));
 
         [HttpGet]
-        public async Task<AnObjectResult<Player>> GetAllPlayers() { 
-            var result = await _mediator.Send(new GetAllPlayersQuery());
-            return result;
-        }
+        public async Task<AnObjectResult<Player>> GetAllPlayers() => await _mediator.Send(new GetAllPlayersQuery());
 
 
         [HttpGet("id")]
@@ -44,11 +41,7 @@ namespace FootballTracker.Controllers
         public async Task<AnObjectResult<Player>> EditPlayer(int id, Player player) => await _mediator.Send(new UpdatePlayerCommand(id, player));
 
         [HttpGet]
-        [Route("{id}/tournaments")]
-        public async Task<AnObjectResult<TournamentSelectedFor>> GetTournamentsSelectedFor(int id) => await _mediator.Send(new GetAllTournamentSelectedForQuery(id));
-
-        [HttpGet]
-        [Route("{playerId}/tournaments/{tournamentId}")]
-        public async Task<AnObjectResult<TournamentSelectedFor>> GetSingleTournamentSelectedFor(int playerId, int tournamentId) => await _mediator.Send(new GetOneTournamentSelectedForQuery(playerId, tournamentId));
+        [Route("team/{teamId}")]
+        public async Task<AnObjectResult<Player>> GetTournamentsSelectedFor(int teamId) => await _mediator.Send(new GetPlayersInTeamQuery(teamId));
     }
 }
