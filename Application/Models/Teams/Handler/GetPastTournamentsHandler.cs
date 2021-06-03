@@ -21,6 +21,11 @@ namespace Application.Models.Teams.Handler
             _team = team;
         }
 
-        public async Task<AnObjectResult<TournamentPosition>> Handle(GetPastTournamentsQuery request, CancellationToken cancellationToken) => await _team.GetPastTournaments(request.TeamId);
+        public Task<AnObjectResult<TournamentPosition>> Handle(GetPastTournamentsQuery request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public async Task<AnObjectResult<TournamentPosition>> Handle(GetPastTournamentsQuery request, CancellationToken cancellationToken) => await _team.GetPastTournaments(request.TeamId);
     }
 }

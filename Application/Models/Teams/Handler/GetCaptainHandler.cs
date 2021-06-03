@@ -21,6 +21,11 @@ namespace Application.Models.Teams.Handler
             _team = team;
         }
 
-        public async Task<AnObjectResult<Player>> Handle(GetCaptainQuery request, CancellationToken cancellationToken) => await _team.GetCaptain(request.TeamId);
+        public Task<AnObjectResult<Player>> Handle(GetCaptainQuery request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public async Task<AnObjectResult<Player>> Handle(GetCaptainQuery request, CancellationToken cancellationToken) => await _team.GetCaptain(request.TeamId);
     }
 }

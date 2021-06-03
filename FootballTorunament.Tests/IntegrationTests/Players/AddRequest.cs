@@ -54,7 +54,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
             var password = "password123P{";
             var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", password, password, "phoneNumber");
 
-            var playerCommand = new AddPlayerCommand(null, user);
+            var playerCommand = new AddPlayerCommand(null, user, null);
 
             var objectResult = await _testFixture.SendAsync(playerCommand);
 
@@ -68,7 +68,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         [Fact]
         public async Task PlayerAndUserIsNotGiven()
         { 
-            var playerCommand = new AddPlayerCommand(null, null);
+            var playerCommand = new AddPlayerCommand(null, null, null);
 
             var objectResult = await _testFixture.SendAsync(playerCommand);
 
@@ -105,7 +105,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
         {
             var user = _testFixture.CreateUserModel("user123@user.com", "user123@user.com", "passwordA1@", "passwordA1@", "phoneNumber");
 
-            AddPlayerCommand playerCommand = new(null, user);
+            AddPlayerCommand playerCommand = new(null, user, null);
 
             var objectResult = await _testFixture.SendAsync(playerCommand);
 

@@ -100,31 +100,25 @@ namespace FootballTorunament.Tests.IntegrationTests.Players
             //assert it
         }
 
-        [Fact(Skip="Until Teams Come In Play")]
+        [Fact]
         public async Task GetPlayersInATeam()
         {
-            var players = await PlayersMethods.AddManyPlayers(_testFixture, null);
+            var updateTeam = (await TeamsMethods.AddNewTeamToDB(_testFixture)).Object.FirstOrDefault();
 
-            Team team = new()
-            {
-                //Players = new List<Player>() {
-                //    players[0],
-                //    players[1]
-                //},
-                TeamName="TeamName"
-            };
+            var players = await PlayersMethods.AddManyPlayers(_testFixture, updateTeam);
 
 
             var result = await _testFixture.SendAsync(new GetAllPlayersQuery());
-            //Player
+            var results = result.Object.Select(x => x.Id);
+
             Assert.NotNull(result);
             Assert.True(result.Succeeded);
             Assert.NotNull(result.Object);
             Assert.NotEmpty(result.Object);
-            Assert.Contains(players[0].Id, result.Object.Select(x => x.Id));
-            Assert.Contains(players[1].Id, result.Object.Select(x => x.Id));
-            Assert.Contains(players[2].Id, result.Object.Select(x => x.Id));
-            Assert.Contains(players[3].Id, result.Object.Select(x => x.Id));
+            Assert.Contains(players[0].Id, results);
+            Assert.Contains(players[1].Id, results);
+            Assert.Contains(players[2].Id, results);
+            Assert.Contains(players[3].Id, results);
         }
     }
 }

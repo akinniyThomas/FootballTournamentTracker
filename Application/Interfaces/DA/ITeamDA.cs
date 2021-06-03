@@ -13,10 +13,10 @@ namespace Application.Interfaces.DA
     {
         Task<AnObjectResult<Team>> GetAllTeams();
         Task<AnObjectResult<Team>> GetOneTeam(int teamId);
-        Task<AnObjectResult<Player>> GetCaptain(int teamId);
-        Task<AnObjectResult<TeamTournament>> GetPresentTournaments(int teamId);
-        Task<AnObjectResult<TournamentPosition>> GetPastTournaments(int teamId);
-        Task<AnObjectResult<Player>> GetPlayersInTeam(int teamId);
+        //Task<AnObjectResult<Player>> GetCaptain(int teamId);
+        //Task<AnObjectResult<TeamTournament>> GetPresentTournaments(int teamId);
+        //Task<AnObjectResult<TournamentPosition>> GetPastTournaments(int teamId);
+        //Task<AnObjectResult<Player>> GetPlayersInTeam(int teamId);
 
         Task<AnObjectResult<Team>> AddTeam(Team team, CancellationToken cancellation);
 

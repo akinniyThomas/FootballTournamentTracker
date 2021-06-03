@@ -32,44 +32,39 @@ namespace Infrastructure.DA
             else return AnObjectResult<Team>.ReturnObjectResult(false, "The Team is given!");
         }
 
-        public Task<AnObjectResult<Team>> DeleteTeam(int teamId, CancellationToken cancellation)
+        public async Task<AnObjectResult<Team>> DeleteTeam(int teamId, CancellationToken cancellation)
         {
-            throw new NotImplementedException();
+            var team = await _tournamentContext.Teams.FindAsync(teamId);
+            if (team.IsNotNull())
+            {
+                _tournamentContext.Teams.Remove(team);
+                await _tournamentContext.SaveChangesAsync(cancellation);
+                return AnObjectResult<Team>.ReturnObjectResult(true, "");
+            }
+            return AnObjectResult<Team>.ReturnObjectResult(false, "No team such team exist, kindly refresh and try again!");
         }
 
-        public Task<AnObjectResult<Team>> GetAllTeams()
+        public Task<AnObjectResult<Team>> GetAllTeams() => Task.FromResult(AnObjectResult<Team>.ReturnObjectResult(_tournamentContext.Teams.ToList(), true, ""));
+
+        public async Task<AnObjectResult<Team>> GetOneTeam(int teamId)
         {
-            throw new NotImplementedException();
+            var team = await _tournamentContext.Teams.FindAsync(teamId);
+            if (team.IsNotNull())
+                return AnObjectResult<Team>.ReturnObjectResult(team, true, "");
+            return AnObjectResult<Team>.ReturnObjectResult(false, "No Team with given parameter exist! Refresh an try again!!");
         }
 
-        public Task<AnObjectResult<Player>> GetCaptain(int teamId)
+        public async Task<AnObjectResult<Team>> UpdateTeam(int teamId, Team team, CancellationToken cancellation)
         {
-            throw new NotImplementedException();
-        }
+            var findTeam = await _tournamentContext.Teams.FindAsync(teamId);
+            if (findTeam.IsNotNull())
+            {
+                findTeam.TeamName = team.TeamName;
+               await _tournamentContext.SaveChangesAsync(cancellation);
+                return AnObjectResult<Team>.ReturnObjectResult(findTeam, true, "");
+            }
 
-        public Task<AnObjectResult<Team>> GetOneTeam(int teamId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<AnObjectResult<TournamentPosition>> GetPastTournaments(int teamId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<AnObjectResult<Player>> GetPlayersInTeam(int teamId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<AnObjectResult<TeamTournament>> GetPresentTournaments(int teamId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<AnObjectResult<Team>> UpdateTeam(int teamId, Team team, CancellationToken cancellation)
-        {
-            throw new NotImplementedException();
+            return AnObjectResult<Team>.ReturnObjectResult(false, "No Team with given parameter exist! Refresh an try again!!");
         }
     }
 }

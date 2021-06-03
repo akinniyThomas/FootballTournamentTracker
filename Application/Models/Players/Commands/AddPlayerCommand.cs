@@ -9,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Players.Commands
 {
-    public record AddPlayerCommand(Player Player, UserViewModel user) : IRequest<AnObjectResult<Player>>;
+    public record AddPlayerCommand(Player Player, UserViewModel User, int? TeamId) : IRequest<AnObjectResult<Player>>;
 }

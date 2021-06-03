@@ -21,9 +21,14 @@ namespace Application.Models.Players.Handler
             _player = player;
         }
 
-        public async Task<AnObjectResult<TournamentSelectedFor>> Handle(GetOneTournamentSelectedForQuery request, CancellationToken cancellationToken)
+        public Task<AnObjectResult<TournamentSelectedFor>> Handle(GetOneTournamentSelectedForQuery request, CancellationToken cancellationToken)
         {
-            return await _player.GetOneTournamentSelectedFor(request.PlayerId, request.TournamentId);
+            throw new NotImplementedException();
         }
+
+        //public async Task<AnObjectResult<TournamentSelectedFor>> Handle(GetOneTournamentSelectedForQuery request, CancellationToken cancellationToken)
+        //{
+        //    return await _player.GetOneTournamentSelectedFor(request.PlayerId, request.TournamentId);
+        //}
     }
 }

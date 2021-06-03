@@ -25,7 +25,7 @@ namespace FootballTracker.Controllers
         }
 
         [HttpPost]
-        public async Task<AnObjectResult<Player>> AddPlayer(UserPlayerViewModel request) => await _mediator.Send(new AddPlayerCommand(request.Player, request.User));
+        public async Task<AnObjectResult<Player>> AddPlayer(UserPlayerViewModel request) => await _mediator.Send(new AddPlayerCommand(request.Player, request.User, request.TeamId));
 
         [HttpDelete("id")]
         public async Task<AnObjectResult<Player>> DeletePlayer(int id) => await _mediator.Send(new DeletePlayerCommand(id));

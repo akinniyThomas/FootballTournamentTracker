@@ -11,5 +11,6 @@ namespace FootballTracker.ViewModels
     {
         public Player Player { get; set; }
         public UserViewModel User { get; set; }
+        public int TeamId { get; set; }
     }
 }

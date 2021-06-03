@@ -22,8 +22,7 @@ namespace FootballTorunament.Tests.IntegrationTests.Methods
                 PlayerName = playerName,
                 PlayerSex = sex
             };
-            player.PlayerTeam = team;
-            return new(player, user);
+            return new(player, user, team?.Id);
         }
 
         public async static Task<AnObjectResult<Player>> AddNewPlayerToDB(Testing testFixture, Team team)

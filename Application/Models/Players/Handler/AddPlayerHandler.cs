@@ -23,7 +23,7 @@ namespace Application.Models.Players.Handler
 
         public async Task<AnObjectResult<Player>> Handle(AddPlayerCommand request, CancellationToken cancellationToken)
         {
-            return await _player.AddPlayer(request.Player, request.user,  cancellationToken);
+            return await _player.AddPlayer(request.Player, request.User, request.TeamId, cancellationToken);
         }
     }
 }
