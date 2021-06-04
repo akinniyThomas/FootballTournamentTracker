@@ -37,5 +37,15 @@ namespace FootballTorunament.Tests.IntegrationTests.Tournaments
             Assert.Equal(4, resultObject.NumberOfTeamsInTournament);
             Assert.Equal(30000, resultObject.RegistrationFee);
         }
+
+        [Fact]
+        public async Task TournamentIsNull()
+        {
+            var result = await _testFixture.SendAsync(new AddTournamentCommand(null));
+            var error = "Tournament is empty!";
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.FirstOrDefault());
+        }
     }
 }

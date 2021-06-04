@@ -22,13 +22,25 @@ namespace FootballTorunament.Tests.IntegrationTests.Tournaments
         [Fact]
         public async Task CanDeleteTournament()
         {
-            var tournament = TournamentsMethods.AddTournament(_testFixture);
+            var tournament = (await TournamentsMethods.AddTournament(_testFixture)).Object.FirstOrDefault();
 
             var deleteTournament = await _testFixture.SendAsync(new DeleteTournamentCommand(tournament.Id));
 
             Assert.True(deleteTournament.Succeeded);
             Assert.Null(deleteTournament.Object);
             Assert.Equal("", deleteTournament.ErrorMessages.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task TournamentDoesNotExist()
+        {
+            var error = "No such Tournament Exist!";
+
+            var deleteTournament = await _testFixture.SendAsync(new DeleteTournamentCommand(0));
+
+            Assert.False(deleteTournament.Succeeded);
+            Assert.Null(deleteTournament.Object);
+            Assert.Equal(error, deleteTournament.ErrorMessages.FirstOrDefault());
         }
     }
 }

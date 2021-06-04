@@ -52,5 +52,17 @@ namespace FootballTorunament.Tests.IntegrationTests.Tournaments
             var resultObject = result.Object;
             Assert.Contains(tournament.Id, resultObject.Select(c => c.Id));
         }
+
+        [Fact]
+        public async Task TournamentDoesNotExist()
+        {
+            var error = "No such Tournament Exist!";
+
+            var result = await _testFixture.SendAsync(new GetOneTournamentQuery(0));
+
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.LastOrDefault());
+        }
     }
 }

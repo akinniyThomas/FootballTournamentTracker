@@ -19,7 +19,10 @@ namespace FootballTorunament.Tests.IntegrationTests.Methods
                 TournamentName = "Champions League 20/21",
                 TournamentSex = Sex.Both,
                 NumberOfTeamsInTournament = 4,
-                RegistrationFee = 30000
+                RegistrationFee = 30000,
+                MaxTeamSize=12,
+                MaxPlayersOnField=5,
+                DateStarted=DateTime.Today
             };
 
             return await testFixture.SendAsync(new AddTournamentCommand(tournament));

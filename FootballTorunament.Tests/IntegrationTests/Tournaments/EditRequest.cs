@@ -42,5 +42,48 @@ namespace FootballTorunament.Tests.IntegrationTests.Tournaments
             Assert.Equal(Sex.Male, resultObject.TournamentSex);
             Assert.Equal(tournamentString, resultObject.TournamentName);
         }
+
+        [Fact]
+        public async Task WrongIDGiven()
+        {
+            var tournament = (await TournamentsMethods.AddTournament(_testFixture)).Object.FirstOrDefault();
+            var tournamentWrongId = (await TournamentsMethods.AddTournament(_testFixture)).Object.FirstOrDefault().Id;
+            var error = "The Tournament you are trying to update is wrong";
+            var tournamentString = "A New Tournament";
+            tournament.TournamentSex = Sex.Male;
+            tournament.TournamentName = tournamentString;
+
+            var result = await _testFixture.SendAsync(new UpdateTournamentCommand(tournamentWrongId, tournament));
+
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.LastOrDefault());
+        }
+
+        [Fact]
+        public async Task TournamentIsNull()
+        {
+            var tournament = (await TournamentsMethods.AddTournament(_testFixture)).Object.FirstOrDefault();
+            var error = "No such tournament exist, Please refresh and try again!";
+
+            var result = await _testFixture.SendAsync(new UpdateTournamentCommand(tournament.Id, null));
+
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.LastOrDefault());
+        }
+
+        [Fact]
+        public async Task TournamentIdDoesntExist()
+        {
+            var tournament = (await TournamentsMethods.AddTournament(_testFixture)).Object.FirstOrDefault();
+            var error = "No such tournament exist, Please refresh and try again!";
+
+            var result = await _testFixture.SendAsync(new UpdateTournamentCommand(0, tournament));
+
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.LastOrDefault());
+        }
     }
 }

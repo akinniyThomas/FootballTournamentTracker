@@ -60,7 +60,7 @@ namespace FootballTorunament.Tests
             _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
             var scopedProvider = _scopeFactory.CreateScope().ServiceProvider;
             var scopedProviderContext = scopedProvider.GetService<TournamentDbContext>();
-            //scopedProviderContext.Database.Migrate();
+            scopedProviderContext.Database.Migrate();
 
         }
 
