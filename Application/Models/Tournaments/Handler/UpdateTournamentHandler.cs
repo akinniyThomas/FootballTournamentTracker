@@ -1,0 +1,26 @@
+﻿using Application.Interfaces.DA;
+using Application.Models.Tournaments.Commands;
+using Application.ViewModels;
+using Domain.Models;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Application.Models.Tournaments.Handler
+{
+    public class UpdateTournamentHandler : IRequestHandler<UpdateTournamentCommand, AnObjectResult<Tournament>>
+    {
+        private readonly ITournamentDA _tournament;
+
+        public UpdateTournamentHandler(ITournamentDA tournament)
+        {
+            _tournament = tournament;
+        }
+
+        public async Task<AnObjectResult<Tournament>> Handle(UpdateTournamentCommand request, CancellationToken cancellationToken) => await _tournament.UpdateTournament(request.TournamentId, request.Tournament, cancellationToken);
+    }
+}

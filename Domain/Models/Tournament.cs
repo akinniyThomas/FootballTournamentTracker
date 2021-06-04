@@ -21,7 +21,7 @@ namespace Domain.Models
         [Required]
         public decimal RegistrationFee { get; set; }
 
-        public ICollection<Prize> Prizes { get; set; }
+        //public ICollection<Prize> Prizes { get; set; }
         [Required]
         public Sex TournamentSex { get; set; }
         [Required]
@@ -44,7 +44,7 @@ namespace Domain.Models
         public Team TournamentRunnerUp { get; set; }
 
         //[Required]
-        [CantExceedNumberOfTeamsInTournament]
-        public ICollection<TeamTournament> TeamsInTournament { get; set; }
+        //[CantExceedNumberOfTeamsInTournament]
+        //public ICollection<TeamTournament> TeamsInTournament { get; set; }
     }
 }

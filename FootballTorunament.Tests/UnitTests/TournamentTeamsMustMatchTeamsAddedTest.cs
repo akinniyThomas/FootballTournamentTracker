@@ -19,13 +19,13 @@ namespace FootballTorunament.Tests.UnitTests
             new TeamTournament(){}
         };
 
-        [Fact]
-        public void TournamentTeamsDoesntMatchTeamsAdded() => Assert.True(CantExceedNumberOfTeamsInTournament.NumberOfTeamsInTournamentDoesNotMatchTeamsInTournament(new Tournament() { TeamsInTournament = TeamTournaments, NumberOfTeamsInTournament = 5 }));
+        //[Fact]
+        //public void TournamentTeamsDoesntMatchTeamsAdded() => Assert.True(CantExceedNumberOfTeamsInTournament.NumberOfTeamsInTournamentDoesNotMatchTeamsInTournament(new Tournament() { TeamsInTournament = TeamTournaments, NumberOfTeamsInTournament = 5 }));
 
-        [Fact]
-        public void TournamentTeamsMatchTeamsAdded() => Assert.False(CantExceedNumberOfTeamsInTournament.NumberOfTeamsInTournamentDoesNotMatchTeamsInTournament(new Tournament() { TeamsInTournament = TeamTournaments, NumberOfTeamsInTournament = 4 }));
+        //[Fact]
+        //public void TournamentTeamsMatchTeamsAdded() => Assert.False(CantExceedNumberOfTeamsInTournament.NumberOfTeamsInTournamentDoesNotMatchTeamsInTournament(new Tournament() { TeamsInTournament = TeamTournaments, NumberOfTeamsInTournament = 4 }));
 
-        [Fact]
-        public void TournamentIsNull() => Assert.False(CantExceedNumberOfTeamsInTournament.NumberOfTeamsInTournamentDoesNotMatchTeamsInTournament(null));
+        //[Fact]
+        //public void TournamentIsNull() => Assert.False(CantExceedNumberOfTeamsInTournament.NumberOfTeamsInTournamentDoesNotMatchTeamsInTournament(null));
     }
 }

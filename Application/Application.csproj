@@ -21,9 +21,6 @@
     <Folder Include="Models\TournamentSelectedFors\Commands\" />
     <Folder Include="Models\TournamentSelectedFors\Handler\" />
     <Folder Include="Models\TournamentSelectedFors\Queries\" />
-    <Folder Include="Models\Tournaments\Commands\" />
-    <Folder Include="Models\Tournaments\Handler\" />
-    <Folder Include="Models\Tournaments\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
