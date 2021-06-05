@@ -57,11 +57,15 @@ namespace Infrastructure.DA
         public async Task<AnObjectResult<Team>> UpdateTeam(int teamId, Team team, CancellationToken cancellation)
         {
             var findTeam = await _tournamentContext.Teams.FindAsync(teamId);
-            if (findTeam.IsNotNull())
+            if (findTeam.IsNotNull() && team.IsNotNull())
             {
-                findTeam.TeamName = team.TeamName;
-               await _tournamentContext.SaveChangesAsync(cancellation);
-                return AnObjectResult<Team>.ReturnObjectResult(findTeam, true, "");
+                if (findTeam.Id == team.Id)
+                {
+                    findTeam.TeamName = team.TeamName;
+                    await _tournamentContext.SaveChangesAsync(cancellation);
+                    return AnObjectResult<Team>.ReturnObjectResult(findTeam, true, "");
+                }
+                return AnObjectResult<Team>.ReturnObjectResult(false, "Trying to update wrong Team");
             }
 
             return AnObjectResult<Team>.ReturnObjectResult(false, "No Team with given parameter exist! Refresh an try again!!");

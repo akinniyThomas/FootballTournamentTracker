@@ -44,5 +44,51 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             Assert.Single(findTeam.Object);
             Assert.Equal(newTeamName, findTeamObject.TeamName);
         }
+
+        [Fact]
+        public async Task TeamIsNull()
+        {
+            var error = "No Team with given parameter exist! Refresh an try again!!";
+
+            var team = (await TeamsMethods.AddNewTeamToDB(_testFixture)).Object.FirstOrDefault();
+            var newTeamName = "New Team Name";
+            team.TeamName = newTeamName;
+            var result = await _testFixture.SendAsync(new UpdateTeamCommand(team.Id, null));
+
+            Assert.False(result.Succeeded);
+            Assert.Equal(error, result.ErrorMessages.LastOrDefault());
+            Assert.Null(result.Object);
+        }
+
+        [Fact]
+        public async Task TeamIdIsWrong()
+        {
+            var error = "No Team with given parameter exist! Refresh an try again!!";
+
+            var team = (await TeamsMethods.AddNewTeamToDB(_testFixture)).Object.FirstOrDefault();
+            var newTeamName = "New Team Name";
+            team.TeamName = newTeamName;
+            var result = await _testFixture.SendAsync(new UpdateTeamCommand(0, team));
+
+            Assert.False(result.Succeeded);
+            Assert.Equal(error, result.ErrorMessages.LastOrDefault());
+            Assert.Null(result.Object);
+        }
+
+        [Fact]
+        public async Task TeamIdIsNotTeamId()
+        {
+            var error = "Trying to update wrong Team";
+
+            var team = (await TeamsMethods.AddNewTeamToDB(_testFixture)).Object.FirstOrDefault();
+            var anotherTeam = (await TeamsMethods.AddNewTeamToDB(_testFixture)).Object.FirstOrDefault();
+            var newTeamName = "New Team Name";
+            team.TeamName = newTeamName;
+            var result = await _testFixture.SendAsync(new UpdateTeamCommand(anotherTeam.Id, team));
+
+            Assert.False(result.Succeeded);
+            Assert.Equal(error, result.ErrorMessages.LastOrDefault());
+            Assert.Null(result.Object);
+        }
     }
 }

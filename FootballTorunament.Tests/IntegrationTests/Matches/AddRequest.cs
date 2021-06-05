@@ -34,5 +34,17 @@ namespace FootballTorunament.Tests.IntegrationTests.Matches
 
             Assert.Equal(4, result.Object.FirstOrDefault().Round);
         }
+
+        [Fact]
+        public async Task MatchIsNull()
+        {
+            var error = "Match cannot be empty!";
+
+            var result = await _testFixture.SendAsync(new AddMatchCommand(null));
+
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.FirstOrDefault());
+        }
     }
 }

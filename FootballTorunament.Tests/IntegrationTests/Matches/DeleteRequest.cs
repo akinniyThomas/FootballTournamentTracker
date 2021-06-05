@@ -30,5 +30,16 @@ namespace FootballTorunament.Tests.IntegrationTests.Matches
             Assert.Null(result.Object);
             Assert.Equal("", result.ErrorMessages.FirstOrDefault());
         }
+
+        [Fact]
+        public async Task MatchIdIsWrong()
+        {
+            var error = "No such Match exist, Please refresh and try again!";
+            var result = await _testFixture.SendAsync(new DeleteMatchCommand(0));
+
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.FirstOrDefault());
+        }
     }
 }

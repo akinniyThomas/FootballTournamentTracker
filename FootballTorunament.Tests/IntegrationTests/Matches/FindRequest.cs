@@ -42,11 +42,24 @@ namespace FootballTorunament.Tests.IntegrationTests.Matches
 
             var result = await _testFixture.SendAsync(new GetOneMatchQuery(match.Id));
 
+            Assert.True(result.Succeeded);
             Assert.NotNull(result.Object);
             Assert.NotEmpty(result.Object);
             Assert.Equal("", result.ErrorMessages.FirstOrDefault());
 
             Assert.Contains(match.Id, result.Object.Select(x => x.Id));
+        }
+
+        [Fact]
+        public async Task MatchDoesNotExist()
+        {
+            var error = "No such Match exist!";
+
+            var result = await _testFixture.SendAsync(new GetOneMatchQuery(0));
+
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.FirstOrDefault());
         }
     }
 }

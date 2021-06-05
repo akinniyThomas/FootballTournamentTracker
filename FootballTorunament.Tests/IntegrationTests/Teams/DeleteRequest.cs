@@ -40,5 +40,18 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             Assert.False(findTeam.Succeeded);
             Assert.Matches(error, findTeam.ErrorMessages.LastOrDefault());
         }
+
+        [Fact]
+        public async Task TeamIsNull()
+        {
+            var deleteOutput = await _testFixture.SendAsync(new DeleteTeamCommand(0));
+
+            var error = "No team such team exist, kindly refresh and try again!";
+
+
+            Assert.False(deleteOutput.Succeeded);
+            Assert.Null(deleteOutput.Object);
+            Assert.Equal(error, deleteOutput.ErrorMessages.FirstOrDefault());
+        }
     }
 }

@@ -39,5 +39,40 @@ namespace FootballTorunament.Tests.IntegrationTests.Matches
             Assert.Equal(10, resultObject.Round);
             Assert.True(resultObject.Played);
         }
+
+        [Fact]
+        public async Task WrongMatchIdGiven()
+        {
+            var error = "Trying to update wrong Match";
+
+            var match = (await MatchesMethods.AddNewMatch(_testFixture)).Object.FirstOrDefault();
+            var anotherMatch = (await MatchesMethods.AddNewMatch(_testFixture)).Object.FirstOrDefault();
+
+            match.Round = 10;
+            match.Played = true;
+
+            var result = await _testFixture.SendAsync(new UpdateMatchCommand(anotherMatch.Id, match));
+
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task MatchIdDoesNotExist()
+        {
+            var error = "No such Match exists!";
+
+            var match = (await MatchesMethods.AddNewMatch(_testFixture)).Object.FirstOrDefault();
+
+            match.Round = 10;
+            match.Played = true;
+
+            var result = await _testFixture.SendAsync(new UpdateMatchCommand(0, match));
+
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.FirstOrDefault());
+        }
     }
 }

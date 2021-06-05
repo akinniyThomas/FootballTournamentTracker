@@ -1,4 +1,5 @@
 ﻿using Application.Models.Players.Queries;
+using Application.Models.Teams.Commands;
 using Domain.Models;
 using FootballTorunament.Tests.IntegrationTests.Methods;
 using System;
@@ -38,5 +39,19 @@ namespace FootballTorunament.Tests.IntegrationTests.Teams
             Assert.Matches("TeamName", teamObject.TeamName);
         }
 
+        [Fact]
+        public async Task TeamIsNull()
+        {
+            var error = "The Team is given!";
+
+            var team = await _testFixture.SendAsync(new AddTeamCommand(null));
+
+            Assert.NotNull(team);
+            Assert.Null(team.Object);
+
+            Assert.False(team.Succeeded);
+
+            Assert.Equal(error, team.ErrorMessages.FirstOrDefault());
+        }
     }
 }
