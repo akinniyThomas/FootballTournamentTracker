@@ -8,9 +8,6 @@
     <Folder Include="Models\TeamTournaments\Commands\" />
     <Folder Include="Models\TeamTournaments\Handler\" />
     <Folder Include="Models\TeamTournaments\Queries\" />
-    <Folder Include="Models\Prizes\Commands\" />
-    <Folder Include="Models\Prizes\Handler\" />
-    <Folder Include="Models\Prizes\Queries\" />
     <Folder Include="Models\TeamScores\Commands\" />
     <Folder Include="Models\TeamScores\Handler\" />
     <Folder Include="Models\TeamScores\Queries\" />

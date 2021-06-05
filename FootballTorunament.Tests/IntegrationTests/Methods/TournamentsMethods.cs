@@ -35,5 +35,10 @@ namespace FootballTorunament.Tests.IntegrationTests.Methods
             (await AddTournament(testFixture)).Object.FirstOrDefault(),
             (await AddTournament(testFixture)).Object.FirstOrDefault()
         };
+
+        internal static Task AddTournament(object testFixture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
