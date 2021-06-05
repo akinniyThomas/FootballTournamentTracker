@@ -48,5 +48,17 @@ namespace FootballTorunament.Tests.IntegrationTests.Prizes
             Assert.Single(result.Object);
             Assert.Equal("", result.ErrorMessages.FirstOrDefault());
         }
+
+        [Fact]
+        public async Task PrizeIsNull()
+        {
+            var result = await _testFixture.SendAsync(new GetOnePrizeQuery(0));
+
+            var error = "No such Prize Exists!";
+
+            Assert.False(result.Succeeded);
+            Assert.Null(result.Object);
+            Assert.Equal(error, result.ErrorMessages.FirstOrDefault());
+        }
     }
 }
