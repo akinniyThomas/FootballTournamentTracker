@@ -21,7 +21,7 @@ namespace Domain.Models
 
         public bool Played { get; set; }
         //[Required]
-        public ICollection<TeamScore> TeamsScores { get; set; }
+        //public ICollection<TeamScore> TeamsScores { get; set; }
         [NoWinnerIfMatchNotPlayed]
         public Team MatchWinner { get; set; }
     }
