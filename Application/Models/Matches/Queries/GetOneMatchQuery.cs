@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.ViewModels;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Matches.Queries
 {
-    public record GetSingleMatchByMatchIdQuery(int MatchId):IRequest<Match>;
+    public record GetOneMatchQuery(int MatchId):IRequest<AnObjectResult<Match>>;
 }

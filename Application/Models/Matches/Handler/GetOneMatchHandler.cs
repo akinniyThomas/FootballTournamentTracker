@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.DA;
 using Application.Models.Matches.Queries;
+using Application.ViewModels;
 using Domain.Models;
 using MediatR;
 using System;
@@ -11,18 +12,15 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Matches.Handler
 {
-    public class GetSingleMatchByMatchIdHandler : IRequestHandler<GetSingleMatchByMatchIdQuery, Match>
+    public class GetOneMatchHandler : IRequestHandler<GetOneMatchQuery, AnObjectResult<Match>>
     {
         private readonly IMatchDA _matchDA;
 
-        public GetSingleMatchByMatchIdHandler(IMatchDA matchDA)
+        public GetOneMatchHandler(IMatchDA matchDA)
         {
             _matchDA = matchDA;
         }
 
-        public Task<Match> Handle(GetSingleMatchByMatchIdQuery request, CancellationToken cancellationToken)
-        {
-            return _matchDA.GetMatch(request.MatchId);
-        }
+        public async Task<AnObjectResult<Match>> Handle(GetOneMatchQuery request, CancellationToken cancellationToken) => await _matchDA.GetMatch(request.MatchId);
     }
 }

@@ -1,4 +1,5 @@
-﻿                        using Domain.Models;
+﻿using Application.ViewModels;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,12 @@ namespace Application.Interfaces.DA
 {
     public interface IMatchDA
     {
-        Task<Match> AddMatch(Match match, CancellationToken cancellationToken);
-        Task<bool> DeleteMatch(int matchId);
-        Task<Match> GetMatch(int matchId);
-        Task<Match> GetMatchByVsTeamsInTournament(int teamId1, int teamId2, int tournamentId);
-        Task<List<Match>> GetMatches();
-        Task<List<Match>> GetMatchesByTeam(int teamId);
-        Task<List<Match>> GetMatchesByVsTeams(int teamId1, int teamId2);
-        Task<List<Match>> GetMatchesInTournament(int tournamentId);
-        Task<Match> UpdateMatch(int matchId, Match match, CancellationToken cancellationToken);
+        Task<AnObjectResult<Match>> AddMatch(Match match, CancellationToken cancellationToken);
+        Task<AnObjectResult<Match>> DeleteMatch(int matchId, CancellationToken cancellationToken);
+
+        Task<AnObjectResult<Match>> GetMatch(int matchId);
+        Task<AnObjectResult<Match>> GetMatches();
+
+        Task<AnObjectResult<Match>> UpdateMatch(int matchId, Match match, CancellationToken cancellationToken);
     }
 }

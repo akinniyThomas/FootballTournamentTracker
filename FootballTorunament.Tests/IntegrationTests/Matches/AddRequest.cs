@@ -1,4 +1,7 @@
-﻿using Application.Models.Players.Commands;
+﻿using Application.Models.Matches.Commands;
+using Application.Models.Players.Commands;
+using Domain.Models;
+using FootballTorunament.Tests.IntegrationTests.Methods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +21,18 @@ namespace FootballTorunament.Tests.IntegrationTests.Matches
             _testFixture = testFixture;
         }
 
+        [Fact]
+        public async Task CanAddMatch()
+        {
+            var result = await MatchesMethods.AddNewMatch(_testFixture);
+
+            Assert.True(result.Succeeded);
+            Assert.NotNull(result.Object);
+            Assert.NotEmpty(result.Object);
+            Assert.Equal("", result.ErrorMessages.FirstOrDefault());
+            Assert.Single(result.Object);
+
+            Assert.Equal(4, result.Object.FirstOrDefault().Round);
+        }
     }
 }

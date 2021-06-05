@@ -19,7 +19,7 @@ namespace Domain.Models
 
         public DateTime MatchDay { get; set; }
 
-        public bool Played { get; set; }
+        public bool Played { get; set; } = false;
         //[Required]
         //public ICollection<TeamScore> TeamsScores { get; set; }
         [NoWinnerIfMatchNotPlayed]

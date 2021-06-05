@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Matches\Commands\" />
     <Folder Include="Models\TeamTournaments\Commands\" />
     <Folder Include="Models\TeamTournaments\Handler\" />
     <Folder Include="Models\TeamTournaments\Queries\" />
