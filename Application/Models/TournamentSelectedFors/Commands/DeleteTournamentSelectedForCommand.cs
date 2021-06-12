@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Models.Players.Queries
+namespace Application.Models.TournamentSelectedFors.Commands
 {
-    public record GetOneTournamentSelectedForQuery(int PlayerId, int TournamentId):IRequest<AnObjectResult<TournamentSelectedFor>>;
+    public record DeleteTournamentSelectedForCommand(int TsfId) : IRequest<AnObjectResult<TournamentSelectedFor>>;
 }
